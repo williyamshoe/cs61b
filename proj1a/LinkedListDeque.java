@@ -117,8 +117,7 @@ public class LinkedListDeque<T> {
     private T helper(int index, Link current) {
         if (sentinel == current) {
             return null;
-        }
-        else if (index == 0) {
+        } else if (index == 0) {
             return current.item;
         }
         return helper(index - 1, current.next);
