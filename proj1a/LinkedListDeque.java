@@ -77,41 +77,37 @@ public class LinkedListDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        T removed_value = sentinel.next.item;
+        T removedValue = sentinel.next.item;
         sentinel.next = sentinel.next.next;
         sentinel.next.prev = sentinel;
         size -= 1;
-        return removed_value;
+        return removedValue;
     }
 
     /* Removes the last item in Deque */
     public T removeLast() {
-        if (isEmpty())
-        {
+        if (isEmpty()) {
             return null;
         }
-        T removed_value = sentinel.prev.item;
+        T removedValue = sentinel.prev.item;
         sentinel.prev = sentinel.prev.prev;
         sentinel.prev.next = sentinel;
         size -= 1;
-        return removed_value;
+        return removedValue;
     }
 
     /* Gets an item in a Deque iteratively */
     public T get(int index) {
         int counter = index;
         Link current = sentinel.next;
-        while (counter > 0)
-        {
-            if (sentinel == current)
-            {
+        while (counter > 0) {
+            if (sentinel == current) {
                 return null;
             }
             current = current.next;
             counter -= 1;
         }
-        if (sentinel == current)
-        {
+        if (sentinel == current) {
             return null;
         }
         return current.item;
@@ -119,12 +115,10 @@ public class LinkedListDeque<T> {
 
     /* Gets an item in a Deque recursively. Is a helper function to getRecursive */
     private T helper(int index, Link current) {
-        if (sentinel == current)
-        {
+        if (sentinel == current) {
             return null;
         }
-        else if (index == 0)
-        {
+        else if (index == 0) {
             return current.item;
         }
         return helper(index - 1, current.next);
@@ -134,5 +128,5 @@ public class LinkedListDeque<T> {
     public T getRecursive(int index) {
         return helper(index, sentinel.next);
     }
-    
+
 }

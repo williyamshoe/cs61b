@@ -17,8 +17,7 @@ public class ArrayDeque<T> {
         int end = current + change;
         if (end >= values.length) {
             end -= values.length;
-        }
-        else if(end < 0) {
+        } else if (end < 0) {
             end += values.length;
         }
         return end;
@@ -32,16 +31,14 @@ public class ArrayDeque<T> {
             T[] a = (T[]) new Object[values.length / 2];
             if (nfirst < nlast) {
                 System.arraycopy(values, changeIndex(nfirst, 1), a, 0, size);
-            }
-            else {
+            } else {
                 System.arraycopy(values, changeIndex(nfirst, 1), a, 0, values.length - nfirst - 1);
                 System.arraycopy(values, 0, a, values.length - nfirst - 1, nlast);
             }
             nlast = size;
             nfirst = a.length - 1;
             values = a;
-        }
-        else if (usage == 1.0) {
+        } else if (usage == 1.0) {
             T[] b = (T[]) new Object[size * 2];
             System.arraycopy(values, nlast, b, 0, size - nlast);
             System.arraycopy(values, 0, b, size - nlast, nlast);
@@ -125,7 +122,7 @@ public class ArrayDeque<T> {
         if (index < 0 || index >= size) {
             return null;
         }
-        return values[changeIndex(nfirst, 1+index)];
+        return values[changeIndex(nfirst, 1 + index)];
     }
 
 }
