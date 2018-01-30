@@ -1,31 +1,26 @@
-public class LinkedListDeque<Generic>
-{
+public class LinkedListDeque<T> {
     /* Link class that comprises the Deque */
-    private class Link
-    {
-        public Link prev;
-        public Generic item;
-        public Link next;
+    private class Link {
+        private Link prev;
+        private T item;
+        private Link next;
 
         /* Creates a typical Link */
-        public Link(Link p, Generic i, Link n)
-        {
+        private Link(Link p, T i, Link n) {
             prev = p;
             item = i;
             next = n;
         }
 
         /* Creates a typical Link with the prev the same as next */
-        public Link(Generic i, Link n)
-        {
+        private Link(T i, Link n) {
             prev = n;
             item = i;
             next = n;
         }
 
         /* Creates a empty Link with sentinel value */
-        public Link(Generic i)
-        {
+        private Link(T i) {
             prev = this;
             item = i;
             next = this;
@@ -34,15 +29,13 @@ public class LinkedListDeque<Generic>
     private Link sentinel;
     private int size;
     /* Creates an empty Deque */
-    public LinkedListDeque()
-    {
+    public LinkedListDeque() {
         sentinel = new Link(null);
         size = 0;
     }
 
     /* Creates a Deque with one item*/
-    public LinkedListDeque(Generic x)
-    {
+    public LinkedListDeque(T x) {
         sentinel = new Link(null);
         Link following = new Link(x, sentinel);
         sentinel.prev = following;
@@ -51,8 +44,7 @@ public class LinkedListDeque<Generic>
     }
 
     /* Adds an item to the front of the Deque */
-    public void addFirst(Generic x)
-    {
+    public void addFirst(T x) {
         Link prevFirst = sentinel.next;
         Link added = new Link(sentinel, x, prevFirst);
         prevFirst.prev = added;
@@ -61,8 +53,7 @@ public class LinkedListDeque<Generic>
     }
 
     /* Adds an item to the end of the Deque */
-    public void addLast(Generic x)
-    {
+    public void addLast(T x) {
         Link prevLast = sentinel.prev;
         Link added = new Link(prevLast, x, sentinel);
         prevLast.next = added;
@@ -71,20 +62,17 @@ public class LinkedListDeque<Generic>
     }
 
     /* Returns if it is an empty Deque or not */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return size == 0;
     }
 
     /* Returns the size of the Deque */
-    public int size()
-    {
+    public int size() {
         return size;
     }
 
     /* Prints the Deque in the order of its items, separated by a space */
-    public void printDeque()
-    {
+    public void printDeque() {
         Link current = sentinel.next;
         while (current != sentinel)
         {
@@ -95,13 +83,12 @@ public class LinkedListDeque<Generic>
     }
 
     /* Removes the first item in Deque */
-    public Generic removeFirst()
-    {
+    public T removeFirst() {
         if (isEmpty())
         {
             return null;
         }
-        Generic removed_value = sentinel.next.item;
+        T removed_value = sentinel.next.item;
         sentinel.next = sentinel.next.next;
         sentinel.next.prev = sentinel;
         size -= 1;
@@ -109,13 +96,12 @@ public class LinkedListDeque<Generic>
     }
 
     /* Removes the last item in Deque */
-    public Generic removeLast()
-    {
+    public T removeLast() {
         if (isEmpty())
         {
             return null;
         }
-        Generic removed_value = sentinel.prev.item;
+        T removed_value = sentinel.prev.item;
         sentinel.prev = sentinel.prev.prev;
         sentinel.prev.next = sentinel;
         size -= 1;
@@ -123,8 +109,7 @@ public class LinkedListDeque<Generic>
     }
 
     /* Gets an item in a Deque iteratively */
-    public Generic get(int index)
-    {
+    public T get(int index) {
         int counter = index;
         Link current = sentinel.next;
         while (counter > 0)
@@ -144,8 +129,7 @@ public class LinkedListDeque<Generic>
     }
 
     /* Gets an item in a Deque recursively. Is a helper function to getRecursive */
-    private Generic helper(int index, Link current)
-    {
+    private T helper(int index, Link current) {
         if (sentinel == current)
         {
             return null;
@@ -158,8 +142,7 @@ public class LinkedListDeque<Generic>
     }
 
     /* Gets an item in a Deque by using helper function helper */
-    public Generic getRecursive(int index)
-    {
+    public T getRecursive(int index) {
         return helper(index, sentinel.next);
     }
 }
