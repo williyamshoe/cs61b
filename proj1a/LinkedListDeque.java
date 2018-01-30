@@ -34,15 +34,6 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-    /* Creates a Deque with one item*/
-    public LinkedListDeque(T x) {
-        sentinel = new Link(null);
-        Link following = new Link(x, sentinel);
-        sentinel.prev = following;
-        sentinel.next = following;
-        size = 1;
-    }
-
     /* Adds an item to the front of the Deque */
     public void addFirst(T x) {
         Link prevFirst = sentinel.next;
@@ -74,8 +65,7 @@ public class LinkedListDeque<T> {
     /* Prints the Deque in the order of its items, separated by a space */
     public void printDeque() {
         Link current = sentinel.next;
-        while (current != sentinel)
-        {
+        while (current != sentinel) {
             System.out.print(current.item);
             System.out.print(" ");
             current = current.next;
@@ -84,8 +74,7 @@ public class LinkedListDeque<T> {
 
     /* Removes the first item in Deque */
     public T removeFirst() {
-        if (isEmpty())
-        {
+        if (isEmpty()) {
             return null;
         }
         T removed_value = sentinel.next.item;
@@ -145,4 +134,5 @@ public class LinkedListDeque<T> {
     public T getRecursive(int index) {
         return helper(index, sentinel.next);
     }
+    
 }
