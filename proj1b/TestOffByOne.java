@@ -18,4 +18,13 @@ public class TestOffByOne {
         assertFalse(offByOne.equalChars('z', 'a'));
         assertFalse(offByOne.equalChars('t', 'v'));
     }
+
+    @Test
+    public void testEqualCharsOddCases() {
+        assertFalse(offByOne.equalChars('E', 'e'));
+        assertFalse(offByOne.equalChars('A', 'b'));
+        assertFalse(offByOne.equalChars('C', 'E'));
+        assertFalse(offByOne.equalChars('-', '/'));
+        assertFalse(offByOne.equalChars('!', '>'));
+    }
 }
