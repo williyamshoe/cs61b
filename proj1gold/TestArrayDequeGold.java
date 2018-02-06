@@ -11,7 +11,7 @@ public class TestArrayDequeGold {
             if (random < 0.25 || (b.isEmpty() && random < 0.5)) {
                 a.addFirst((int) (random * 200));
                 b.addFirst((int) (random * 200));
-                message = message + "addFront("+ ((int) (random * 200)) +")\n";
+                message = message + "addFirst("+ ((int) (random * 200)) +")\n";
             } else if (random < 0.5 || b.isEmpty()) {
                 a.addLast((int) (random * 100));
                 b.addLast((int) (random * 100));
