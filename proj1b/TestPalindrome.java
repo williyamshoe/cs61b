@@ -36,6 +36,12 @@ public class TestPalindrome {
     }
 
     @Test
+    public void testIsPalindromeOddCases() {
+        assertFalse(palindrome.isPalindrome("1-/;["));
+        assertFalse(palindrome.isPalindrome("NoOn"));
+    }
+
+    @Test
     public void testIsPalindromeWithCCBase() {
         assertTrue(palindrome.isPalindrome("", cc));
         assertTrue(palindrome.isPalindrome("w", cc));
