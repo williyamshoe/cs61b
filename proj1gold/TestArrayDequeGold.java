@@ -20,7 +20,7 @@ public class TestArrayDequeGold {
                 message = message + "removeFirst()\n";
                 assertEquals(message, b.removeFirst(), a.removeFirst());
             } else {
-                message = message + "removeFirst()\n";
+                message = message + "removeLast()\n";
                 assertEquals(message, b.removeLast(), a.removeLast());
             }
         }
