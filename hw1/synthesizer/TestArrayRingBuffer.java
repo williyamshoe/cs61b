@@ -19,6 +19,20 @@ public class TestArrayRingBuffer {
         assertEquals(3, (int) arb.dequeue());
     }
 
+    @Test
+    public void someIterTest() {
+        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer<>(10);
+        arb.enqueue(1);
+        arb.enqueue(2);
+        arb.enqueue(3);
+        for (Integer elem : arb) {
+            System.out.println(elem);
+            if (elem == null) {
+                System.out.println("FAIL!!!");
+            }
+        }
+    }
+
     /** Calls tests for ArrayRingBuffer. */
     public static void main(String[] args) {
         jh61b.junit.textui.runClasses(TestArrayRingBuffer.class);
