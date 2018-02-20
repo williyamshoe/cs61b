@@ -63,7 +63,7 @@ public class ArrayRingBuffer<T> extends AbstractBoundedQueue<T> {
     }
 
     public class Iter implements Iterator<T> {
-        private int counter = 0;
+        private int counter = first;
 
         @Override
         public boolean hasNext() {
