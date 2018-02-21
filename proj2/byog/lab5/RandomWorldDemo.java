@@ -13,7 +13,7 @@ public class RandomWorldDemo {
     private static final int WIDTH = 50;
     private static final int HEIGHT = 50;
 
-    private static final long SEED = 2873123;
+    private static final long SEED = 2873223;
     private static final Random RANDOM = new Random(SEED);
 
     /**
@@ -34,13 +34,18 @@ public class RandomWorldDemo {
      *  a wall, 33% chance of being a flower, and 33%
      *  chance of being empty space.
      */
-    private static TETile randomTile() {
-        int tileNum = RANDOM.nextInt(3);
+    public static TETile randomTile() {
+        int tileNum = RANDOM.nextInt(8);
         switch (tileNum) {
             case 0: return Tileset.WALL;
             case 1: return Tileset.FLOWER;
-            case 2: return Tileset.NOTHING;
-            default: return Tileset.NOTHING;
+            case 2: return Tileset.FLOOR;
+            case 3: return Tileset.SAND;
+            case 4: return Tileset.GRASS;
+            case 5: return Tileset.WATER;
+            case 6: return Tileset.MOUNTAIN;
+            case 7: return Tileset.TREE;
+            default: return Tileset.LOCKED_DOOR;
         }
     }
 

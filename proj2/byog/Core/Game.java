@@ -2,6 +2,9 @@ package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
+import byog.TileEngine.Tileset;
+
+import java.util.Random;
 
 public class Game {
     TERenderer ter = new TERenderer();
@@ -13,6 +16,7 @@ public class Game {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
+
     }
 
     /**
@@ -31,8 +35,19 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
+        return null;
+    }
 
-        TETile[][] finalWorldFrame = null;
-        return finalWorldFrame;
+    private void settonothing(TETile[][] world) {
+        for (int i = 0; i < WIDTH; i += 1) {
+            for (int j = 0; j < HEIGHT; j += 1) {
+                world[i][j] = Tileset.NOTHING;
+            }
+        }
+    }
+    public static void main(String[] args) {
+        Game g = new Game();
+        g.ter.initialize(80, 30);
+        g.ter.renderFrame(g.playWithInputString("coolz"));
     }
 }
