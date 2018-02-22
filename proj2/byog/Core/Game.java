@@ -34,30 +34,16 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        TETile[][] TILES = new TETile[WIDTH][HEIGHT];
-        long seed = 0;
-        for (int i = 0; i < input.length(); i += 1) {
-            seed += (long) input.charAt(i);
-        }
-        WorldGen world = new WorldGen(TILES, seed, Tileset.FLOOR, Tileset.WALL);
-        world.makeRooms(TILES);
-        world.makeHallways();
-        return TILES;
-        /*TETile[][] TILES = new TETile[WIDTH][HEIGHT];
 
-        long seed = 0;
+        TETile[][] TILES = new TETile[WIDTH][HEIGHT];
+
+        long seed;
         boolean save = false;
 
         if (input.charAt(0) == 'n' || input.charAt(0) == 'N') {
-            for (int i = 1; i < input.length(); i += 1) {
-                if (i == input.length() - 2 && input.charAt(i) == ':' && (input.charAt(i + 1) == 'q' || input.charAt(i + 1) == 'Q')) {
-                    save = true;
-                } else {
-                    seed += (long) input.charAt(i);
-                }
-            }
+            seed = Long.parseLong(input.substring(1, input.length() - 1));
             WorldGen world = new WorldGen(TILES, seed, Tileset.FLOOR, Tileset.WALL);
-            world.makeRooms(world, TILES);
+            world.makeRooms(TILES);
             world.makeHallways();
             if (save) {
                 saved = TILES;
@@ -69,12 +55,12 @@ public class Game {
             return null;
         } else {
             return playWithInputString("n" + input);
-        }*/
+        }
     }
 
     private static void main(String[] args) {
         Game g = new Game();
-        TETile[][] board = g.playWithInputString("sd47f8sd");
+        TETile[][] board = g.playWithInputString("n123456789s");
         g.ter.initialize(WIDTH, HEIGHT);
         g.ter.renderFrame(board);
 
