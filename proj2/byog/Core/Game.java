@@ -9,7 +9,7 @@ public class Game {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    public TETile[][] saved = null;
+    private TETile[][] saved = null;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -34,8 +34,16 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-
         TETile[][] TILES = new TETile[WIDTH][HEIGHT];
+        long seed = 0;
+        for (int i = 1; i < input.length(); i += 1) {
+            seed += (long) input.charAt(i);
+        }
+        WorldGen world = new WorldGen(TILES, seed, Tileset.FLOOR, Tileset.WALL);
+        world.makeRooms(world, TILES);
+        world.makeHallways();
+        return TILES;
+        /*TETile[][] TILES = new TETile[WIDTH][HEIGHT];
 
         long seed = 0;
         boolean save = false;
@@ -61,12 +69,12 @@ public class Game {
             return null;
         } else {
             return playWithInputString("n" + input);
-        }
+        }*/
     }
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         Game g = new Game();
-        TETile[][] board = g.playWithInputString("sdfsd");
+        TETile[][] board = g.playWithInputString("sd4fsd");
         g.ter.initialize(WIDTH, HEIGHT);
         g.ter.renderFrame(board);
 

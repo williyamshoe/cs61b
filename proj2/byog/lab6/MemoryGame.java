@@ -43,6 +43,7 @@ public class MemoryGame {
         StdDraw.clear(Color.BLACK);
         StdDraw.enableDoubleBuffering();
 
+
         //TODO: Initialize random number generator
     }
 
