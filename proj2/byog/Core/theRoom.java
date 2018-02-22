@@ -52,15 +52,15 @@ public class TheRoom {
         makeHallSection(destination);
     }
 
-    private void makeHallSection(int[] locOfPath) {
-        w.checkAndReplace(locOfPath[0], locOfPath[1], w.floor);
-        w.checkAndReplace(locOfPath[0] + 1, locOfPath[1], w.wall);
-        w.checkAndReplace(locOfPath[0] - 1, locOfPath[1], w.wall);
-        w.checkAndReplace(locOfPath[0], locOfPath[1] + 1, w.wall);
-        w.checkAndReplace(locOfPath[0], locOfPath[1] - 1, w.wall);
-        w.checkAndReplace(locOfPath[0] + 1, locOfPath[1] + 1, w.wall);
-        w.checkAndReplace(locOfPath[0] + 1, locOfPath[1] - 1, w.wall);
-        w.checkAndReplace(locOfPath[0] - 1, locOfPath[1] + 1, w.wall);
-        w.checkAndReplace(locOfPath[0] - 1, locOfPath[1] - 1, w.wall);
+    private void makeHallSection(int[] locationOfPath) {
+        w.checkAndReplace(locationOfPath[0], locationOfPath[1], w.floor);
+        w.checkAndReplace(locationOfPath[0] + 1, locationOfPath[1], w.wall);
+        w.checkAndReplace(locationOfPath[0] - 1, locationOfPath[1], w.wall);
+        w.checkAndReplace(locationOfPath[0], locationOfPath[1] + 1, w.wall);
+        w.checkAndReplace(locationOfPath[0], locationOfPath[1] - 1, w.wall);
+        w.checkAndReplace(locationOfPath[0] + 1, locationOfPath[1] + 1, w.wall);
+        w.checkAndReplace(locationOfPath[0] + 1, locationOfPath[1] - 1, w.wall);
+        w.checkAndReplace(locationOfPath[0] - 1, locationOfPath[1] + 1, w.wall);
+        w.checkAndReplace(locationOfPath[0] - 1, locationOfPath[1] - 1, w.wall);
     }
 }
