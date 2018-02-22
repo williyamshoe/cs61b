@@ -10,6 +10,7 @@ public class WorldGen {
     private static final int HEIGHT = 30;
     private Random ran;
     private int numRooms;
+    private TETile[][] world;
     protected TETile floor;
     protected TETile wall;
 
@@ -22,9 +23,11 @@ public class WorldGen {
             }
         }
 
+        this.world = world;
+
         this.ran = new Random(seed);
 
-        numRooms = ran.nextInt(6) + 14;
+        numRooms = ran.nextInt(4) + 12;
         rooms = new theRoom[numRooms];
 
         this.floor = floor;
@@ -34,7 +37,7 @@ public class WorldGen {
         return numRooms;
     }
 
-    protected void checkAndReplace(int xpos, int ypos, TETile tile, TETile[][] world) {
+    protected void checkAndReplace(int xpos, int ypos, TETile tile) {
         if (xpos == 0 || ypos == 0 || xpos == WIDTH - 1 || ypos == HEIGHT - 1) {
             world[xpos][ypos] = wall;
         } else if (xpos >= 0 && ypos >= 0 && xpos < WIDTH && ypos < HEIGHT && world[xpos][ypos] != floor) {
@@ -42,12 +45,12 @@ public class WorldGen {
         }
     }
 
-    private boolean checkOverlap (int xpos, int ypos, int xsize, int ysize, TETile[][] world) {
+    private boolean checkOverlap (int xpos, int ypos, int xsize, int ysize) {
         return world[xpos][ypos] == floor || world[xpos + xsize][ypos] == floor ||
                 world[xpos][ypos + ysize] == floor || world[xpos + xsize][ypos + ysize] == floor;
     }
 
-    private void addRoom(theRoom room, TETile[][] world){
+    private void addRoom(theRoom room){
         int xLim = room.xPos + room.roomWidth + 1;
         int yLim = room.yPos + room.roomHeight + 1;
         for (int x = room.xPos; x < xLim; x += 1) {
@@ -60,27 +63,26 @@ public class WorldGen {
         }
     }
 
-    protected void makeRooms(WorldGen world, TETile[][] TILES) {
-        for (int i = 0; i < world.getNumRooms(); i += 1) {
+    protected void makeRooms(TETile[][] TILES) {
+        for (int i = 0; i < getNumRooms(); i += 1) {
             int maxRange = 10;
             int minRange = 5;
-            Random ran = world.ran;
             int xsize = ran.nextInt(maxRange + 1 - minRange) + minRange;
             int ysize = ran.nextInt(maxRange + 1 - minRange) + minRange;
             int xpos = ran.nextInt(WIDTH - xsize);
             int ypos = ran.nextInt(HEIGHT - ysize);
 
-            while (checkOverlap(xpos, ypos, xsize, ysize, TILES)) {
+            while (checkOverlap(xpos, ypos, xsize, ysize)) {
                 xsize = ran.nextInt(maxRange + 1 - minRange) + minRange;
                 ysize = ran.nextInt(maxRange + 1 - minRange) + minRange;
                 xpos = ran.nextInt(WIDTH - xsize);
                 ypos = ran.nextInt(HEIGHT - ysize);
             }
 
-            theRoom room = new theRoom(xsize, ysize, xpos, ypos, TILES, ran, world);
+            theRoom room = new theRoom(xsize, ysize, xpos, ypos, TILES, ran, this);
 
             rooms[i] = room;
-            world.addRoom(room, TILES);
+            addRoom(room);
         }
     }
 
@@ -100,7 +102,7 @@ public class WorldGen {
         int SEED = 91789;
         WorldGen world = new WorldGen(TILES, SEED, Tileset.FLOWER, Tileset.TREE);
 
-        world.makeRooms(world, TILES);
+        world.makeRooms(TILES);
 
         world.makeHallways();
 

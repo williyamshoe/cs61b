@@ -36,11 +36,11 @@ public class Game {
         // drawn if the same inputs had been given to playWithKeyboard().
         TETile[][] TILES = new TETile[WIDTH][HEIGHT];
         long seed = 0;
-        for (int i = 1; i < input.length(); i += 1) {
+        for (int i = 0; i < input.length(); i += 1) {
             seed += (long) input.charAt(i);
         }
         WorldGen world = new WorldGen(TILES, seed, Tileset.FLOOR, Tileset.WALL);
-        world.makeRooms(world, TILES);
+        world.makeRooms(TILES);
         world.makeHallways();
         return TILES;
         /*TETile[][] TILES = new TETile[WIDTH][HEIGHT];
@@ -74,7 +74,7 @@ public class Game {
 
     private static void main(String[] args) {
         Game g = new Game();
-        TETile[][] board = g.playWithInputString("sd4fsd");
+        TETile[][] board = g.playWithInputString("sd47f8sd");
         g.ter.initialize(WIDTH, HEIGHT);
         g.ter.renderFrame(board);
 
