@@ -3,7 +3,7 @@ package byog.Core;
 import byog.TileEngine.TETile;
 import java.util.Random;
 
-public class theRoom {
+public class TheRoom {
     protected int roomHeight;
     protected int roomWidth;
     protected int xPos;
@@ -12,7 +12,7 @@ public class theRoom {
     protected TETile[][] world;
     private WorldGen w;
 
-    theRoom(int xsize, int ysize, int xpos, int ypos, TETile[][] world, Random ran, WorldGen w) {
+    TheRoom(int xsize, int ysize, int xpos, int ypos, TETile[][] world, Random ran, WorldGen w) {
         this.roomHeight = ysize;
         this.roomWidth = xsize;
 
@@ -36,23 +36,23 @@ public class theRoom {
     }
 
     public void makeHall(int[] destination, int width, int height) {
-        int[] startingpt = findRandomSpot(width, height);
-        int[] difference = new int[] {destination[0] - startingpt[0], destination[1] - startingpt[1]};
+        int[] startpt = findRandomSpot(width, height);
+        int[] difference = new int[] {destination[0] - startpt[0], destination[1] - startpt[1]};
         int distance = Math.abs(difference[0]) + Math.abs(difference[1]);
         while (distance != 0) {
-            makeHallSection(startingpt, w);
+            makeHallSection(startpt);
             if (ran.nextInt(distance) < Math.abs(difference[0])) {
-                startingpt[0] += difference[0] / Math.abs(difference[0]);
+                startpt[0] += difference[0] / Math.abs(difference[0]);
             } else {
-                startingpt[1] += difference[1] / Math.abs(difference[1]);
+                startpt[1] += difference[1] / Math.abs(difference[1]);
             }
-            difference = new int[] {destination[0] - startingpt[0], destination[1] - startingpt[1]};
+            difference = new int[] {destination[0] - startpt[0], destination[1] - startpt[1]};
             distance = Math.abs(difference[0]) + Math.abs(difference[1]);
         }
-        makeHallSection(destination, w);
+        makeHallSection(destination);
     }
 
-    private void makeHallSection(int[] locOfPath, WorldGen w) {
+    private void makeHallSection(int[] locOfPath) {
         w.checkAndReplace(locOfPath[0], locOfPath[1], w.floor);
         w.checkAndReplace(locOfPath[0] + 1, locOfPath[1], w.wall);
         w.checkAndReplace(locOfPath[0] - 1, locOfPath[1], w.wall);

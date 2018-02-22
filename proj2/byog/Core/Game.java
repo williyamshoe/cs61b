@@ -31,24 +31,24 @@ public class Game {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] playWithInputString(String input) {
-        // TODO: Fill out this method to run the game using the input passed in,
+        // Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
 
-        TETile[][] TILES = new TETile[WIDTH][HEIGHT];
+        TETile[][] tiles = new TETile[WIDTH][HEIGHT];
 
         long seed;
         boolean save = false;
 
         if (input.charAt(0) == 'n' || input.charAt(0) == 'N') {
             seed = Long.parseLong(input.substring(1, input.length() - 1));
-            WorldGen world = new WorldGen(TILES, seed, Tileset.FLOOR, Tileset.WALL);
-            world.makeRooms(TILES);
+            WorldGen world = new WorldGen(tiles, seed, Tileset.FLOOR, Tileset.WALL);
+            world.makeRooms(tiles);
             world.makeHallways();
             if (save) {
-                saved = TILES;
+                saved = tiles;
             }
-            return TILES;
+            return tiles;
         } else if ((input.charAt(0) == 'l' || input.charAt(0) == 'L') && saved != null) {
             return saved;
         } else if ((input.charAt(0) == 'l' || input.charAt(0) == 'L') && saved == null) {
