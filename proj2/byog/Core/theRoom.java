@@ -1,7 +1,6 @@
 package byog.Core;
 
 import byog.TileEngine.TETile;
-import byog.TileEngine.Tileset;
 import java.util.Random;
 
 public class theRoom {
@@ -9,18 +8,21 @@ public class theRoom {
     protected int roomWidth;
     protected int xPos;
     protected int yPos;
-    protected Random ran;
+    private Random ran;
     protected TETile[][] world;
+    private WorldGen w;
 
-    public theRoom(int minRange, int maxRange, TETile[][] world, Random ran) {
-        this.roomHeight = ran.nextInt(maxRange + 1 - minRange) + minRange;
-        this.roomWidth = ran.nextInt(maxRange + 1 - minRange) + minRange;
+    theRoom(int xsize, int ysize, int xpos, int ypos, TETile[][] world, Random ran, WorldGen w) {
+        this.roomHeight = ysize;
+        this.roomWidth = xsize;
 
-        this.xPos = Math.max(0,ran.nextInt(world.length) - roomWidth);
-        this.yPos = Math.max(0,ran.nextInt(world[0].length) - roomHeight);
+        this.xPos = xpos;
+        this.yPos = ypos;
 
         this.ran = ran;
         this.world = world;
+
+        this.w = w;
     }
 
     public int[] findRandomSpot(int width, int height) {
@@ -38,7 +40,7 @@ public class theRoom {
         int[] difference = new int[] {destination[0] - startingpt[0], destination[1] - startingpt[1]};
         int distance = Math.abs(difference[0]) + Math.abs(difference[1]);
         while (distance != 0) {
-            makeHallSection(startingpt);
+            makeHallSection(startingpt, w);
             if (ran.nextInt(distance) < Math.abs(difference[0])) {
                 startingpt[0] += difference[0] / Math.abs(difference[0]);
             } else {
@@ -47,18 +49,18 @@ public class theRoom {
             difference = new int[] {destination[0] - startingpt[0], destination[1] - startingpt[1]};
             distance = Math.abs(difference[0]) + Math.abs(difference[1]);
         }
-        makeHallSection(destination);
+        makeHallSection(destination, w);
     }
 
-    public void makeHallSection(int[] locOfPath) {
-        WorldGen.checkAndReplace(locOfPath[0], locOfPath[1], Tileset.FLOOR, world);
-        WorldGen.checkAndReplace(locOfPath[0] + 1, locOfPath[1], Tileset.WALL, world);
-        WorldGen.checkAndReplace(locOfPath[0] - 1, locOfPath[1], Tileset.WALL, world);
-        WorldGen.checkAndReplace(locOfPath[0], locOfPath[1] + 1, Tileset.WALL, world);
-        WorldGen.checkAndReplace(locOfPath[0], locOfPath[1] - 1, Tileset.WALL, world);
-        WorldGen.checkAndReplace(locOfPath[0] + 1, locOfPath[1] + 1, Tileset.WALL, world);
-        WorldGen.checkAndReplace(locOfPath[0] + 1, locOfPath[1] - 1, Tileset.WALL, world);
-        WorldGen.checkAndReplace(locOfPath[0] - 1, locOfPath[1] + 1, Tileset.WALL, world);
-        WorldGen.checkAndReplace(locOfPath[0] - 1, locOfPath[1] - 1, Tileset.WALL, world);
+    private void makeHallSection(int[] locOfPath, WorldGen w) {
+        w.checkAndReplace(locOfPath[0], locOfPath[1], w.floor, world);
+        w.checkAndReplace(locOfPath[0] + 1, locOfPath[1], w.wall, world);
+        w.checkAndReplace(locOfPath[0] - 1, locOfPath[1], w.wall, world);
+        w.checkAndReplace(locOfPath[0], locOfPath[1] + 1, w.wall, world);
+        w.checkAndReplace(locOfPath[0], locOfPath[1] - 1, w.wall, world);
+        w.checkAndReplace(locOfPath[0] + 1, locOfPath[1] + 1, w.wall, world);
+        w.checkAndReplace(locOfPath[0] + 1, locOfPath[1] - 1, w.wall, world);
+        w.checkAndReplace(locOfPath[0] - 1, locOfPath[1] + 1, w.wall, world);
+        w.checkAndReplace(locOfPath[0] - 1, locOfPath[1] - 1, w.wall, world);
     }
 }

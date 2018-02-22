@@ -4,13 +4,12 @@ import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
 
-import java.util.Random;
-
 public class Game {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
+    public TETile[][] saved = null;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
@@ -35,19 +34,46 @@ public class Game {
         // TODO: Fill out this method to run the game using the input passed in,
         // and return a 2D tile representation of the world that would have been
         // drawn if the same inputs had been given to playWithKeyboard().
-        return null;
-    }
 
-    private void settonothing(TETile[][] world) {
-        for (int i = 0; i < WIDTH; i += 1) {
-            for (int j = 0; j < HEIGHT; j += 1) {
-                world[i][j] = Tileset.NOTHING;
+        TETile[][] TILES = new TETile[WIDTH][HEIGHT];
+
+        long seed = 0;
+        boolean save = false;
+
+        if (input.charAt(0) == 'n' || input.charAt(0) == 'N') {
+            for (int i = 1; i < input.length(); i += 1) {
+                if (i == input.length() - 2 && input.charAt(i) == ':' && (input.charAt(i + 1) == 'q' || input.charAt(i + 1) == 'Q')) {
+                    save = true;
+                } else {
+                    seed += (long) input.charAt(i);
+                }
             }
+            WorldGen world = new WorldGen(TILES, seed, Tileset.FLOOR, Tileset.WALL);
+            world.makeRooms(world, TILES);
+            world.makeHallways();
+            if (save) {
+                saved = TILES;
+            }
+            return TILES;
+        } else if ((input.charAt(0) == 'l' || input.charAt(0) == 'L') && saved != null) {
+            return saved;
+        } else if ((input.charAt(0) == 'l' || input.charAt(0) == 'L') && saved == null) {
+            return null;
+        } else {
+            return playWithInputString("n" + input);
         }
     }
+
     public static void main(String[] args) {
         Game g = new Game();
-        g.ter.initialize(80, 30);
-        g.ter.renderFrame(g.playWithInputString("coolz"));
+        TETile[][] board = g.playWithInputString("sdfsd");
+        g.ter.initialize(WIDTH, HEIGHT);
+        g.ter.renderFrame(board);
+
+        /*
+        TETile[][] board1 = g.playWithInputString("L");
+        g.ter.initialize(WIDTH, HEIGHT);
+        g.ter.renderFrame(board1);
+        */
     }
 }
