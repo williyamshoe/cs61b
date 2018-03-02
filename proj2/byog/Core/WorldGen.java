@@ -3,9 +3,11 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+
+import java.io.Serializable;
 import java.util.Random;
 
-public class WorldGen {
+public class WorldGen implements Serializable {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 30;
     private Random ran;
@@ -13,6 +15,7 @@ public class WorldGen {
     private TETile[][] world;
     protected TETile floor;
     protected TETile wall;
+    private static final long serialVersionUID = 637628736418L;
 
     private static TheRoom[] rooms;
 
@@ -68,7 +71,7 @@ public class WorldGen {
 
     protected void makeRooms(TETile[][] tiles) {
         for (int i = 0; i < getNumRooms(); i += 1) {
-            int maxRange = 10;
+            int maxRange = 9;
             int minRange = 5;
             int xsize = ran.nextInt(maxRange + 1 - minRange) + minRange;
             int ysize = ran.nextInt(maxRange + 1 - minRange) + minRange;

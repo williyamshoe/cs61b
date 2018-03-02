@@ -1,9 +1,11 @@
 package byog.Core;
 
 import byog.TileEngine.TETile;
+
+import java.io.Serializable;
 import java.util.Random;
 
-public class TheRoom {
+public class TheRoom implements Serializable {
     protected int roomHeight;
     protected int roomWidth;
     protected int xPos;
@@ -11,6 +13,7 @@ public class TheRoom {
     private Random ran;
     protected TETile[][] world;
     private WorldGen w;
+    private static final long serialVersionUID = 637628733836418L;
 
     TheRoom(int xsize, int ysize, int xpos, int ypos, TETile[][] world, Random ran, WorldGen w) {
         this.roomHeight = ysize;
