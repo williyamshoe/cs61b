@@ -30,7 +30,7 @@ public class WorldGen implements Serializable {
 
         this.ran = new Random(seed);
 
-        numRooms = ran.nextInt(4) + 12;
+        numRooms = ran.nextInt(3) + 12;
         rooms = new TheRoom[numRooms];
 
         this.floor = floor;

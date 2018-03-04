@@ -3,162 +3,53 @@ package byog.Core;
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
+import edu.princeton.cs.introcs.StdAudio;
 import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
 import java.io.*;
 
 public class Game {
-    TERenderer ter = new TERenderer();
+    private TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
-    private final String BLOCK = "████████████";
+    private boolean finished = false;
+    private long seed;
 
     /**
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
-        TETile[][] board = drawMenu();
+        //StdAudio.loop("/byog/Core/megalovania.wav");
+        ter.initialize(30, 30);
+        TETile[][] board = playWithInputString(DisplayMethods.drawMenu(ter));
+        StdAudio.close();
+        seed = Long.parseLong(DisplayMethods.s);
         ter.initialize(WIDTH, HEIGHT + 5);
 
-        Integer[] location = findFloor(board);
+        Integer[] location1 = HelperMethods.findOrMakePlayer(board, seed, Tileset.PLAYER1);
+        Integer[] location2 = HelperMethods.findOrMakePlayer(board, seed, Tileset.PLAYER2);
+        Integer[][] locations = new Integer[][] {location1, location2};
+        HelperMethods.updateFlag(board, ter);
 
-        board[location[0]][location[1]] = Tileset.PLAYER;
-
-        ter.renderFrame(board);
         StdDraw.enableDoubleBuffering();
         StdDraw.setPenColor(Color.WHITE);
-        while(true) {
-            location = playerMovement(board, location);
-            mouseMenu(board);
+        while(!finished) {
+            locations = HelperMethods.playersMovement(board, locations, ter);
+            HelperMethods.updateFlag(board, ter);
+            DisplayMethods.mouseMenu(board);
             StdDraw.show();
-        }
-    }
-
-    private void mouseMenu(TETile[][] board) {
-        StdDraw.setPenColor(Color.BLACK);
-        StdDraw.text(4, HEIGHT + 4, BLOCK);
-
-        StdDraw.setPenColor(Color.WHITE);
-        String text = "Nothing";
-        int x = (int) (StdDraw.mouseX());
-        int y = (int) (StdDraw.mouseY());
-
-        if (x < WIDTH && y < HEIGHT) {
-            TETile tile = board[x][y];
-            if (tile == Tileset.WALL) {
-                text = "Wall";
-            } else if (tile == Tileset.FLOOR) {
-                text = "Floor";
-            } else if (tile == Tileset.PLAYER) {
-                text = "Player";
+            if (HelperMethods.flagcount1 >= 10){
+                ter.initialize(30, 30);
+                DisplayMethods.win(1);
+                finished = true;
+            } else if (HelperMethods.flagcount2 >= 10) {
+                ter.initialize(30, 30);
+                DisplayMethods.win(2);
+                finished = true;
             }
         }
-        StdDraw.text(4, HEIGHT + 4, text);
-    }
-
-    public TETile[][] drawMenu(){
-        StdDraw.clear(Color.BLACK);
-        Font gameName = new Font("Monospaced", Font.BOLD, 50);
-        StdDraw.setFont(gameName);
-        StdDraw.setPenColor(Color.WHITE);
-        StdDraw.text(0.5, 0.8, "Escape CS61B");
-
-        StdDraw.setFont(new Font("Monospaced",Font.BOLD, 30));
-        StdDraw.text(0.5, 0.5, "New Game (N)");
-        StdDraw.text(0.5,0.4, "Load Game (L)");
-        StdDraw.text(0.5,0.3, "Quit (Q)");
-        StdDraw.show();
-
-        boolean pressed = false;
-        String seed = "";
-        TETile[][] finalWorldFrame = new TETile[1][1];
-
-        while (!pressed) {
-            if (StdDraw.hasNextKeyTyped()) {
-                String typed = (StdDraw.nextKeyTyped() + "").toUpperCase();
-                switch (typed){
-                    case "N":
-                        while (true) {
-                            if (StdDraw.hasNextKeyTyped()) {
-                                typed = StdDraw.nextKeyTyped() + "";
-                                if (typed.equalsIgnoreCase("S")) {
-                                    break;
-                                }
-                                seed += typed;
-                            }
-                        }
-                        finalWorldFrame = playWithInputString("N"+seed+"S");
-                        pressed = true;
-                        break;
-
-                    case "L":
-                        finalWorldFrame = playWithInputString("L637628736418L");
-                        pressed = true;
-                        break;
-
-                    case "Q":
-                        saveGameState(finalWorldFrame);
-                        System.exit(0);
-                        pressed = true;
-                        break;
-                }
-            }
-        }
-
-        return finalWorldFrame;
-    }
-
-    private Integer[] playerMovement(TETile[][] board, Integer[] location) {
-        if (!StdDraw.hasNextKeyTyped()) {
-            return location;
-        }
-
-        int playerx = location[0];
-        int playery = location[1];
-
-        int newplayerx = playerx;
-        int newplayery = playery;
-
-        char input = StdDraw.nextKeyTyped();
-
-        if (input == 'w' && safeMovement(board, playerx, playery + 1)) {
-            newplayery = playery + 1;
-        } else if (input == 'd' && safeMovement(board, playerx + 1, playery )) {
-            newplayerx = playerx + 1;
-        } else if (input == 's' && safeMovement(board, playerx, playery - 1)) {
-            newplayery = playery - 1;
-        } else if (input == 'a' && safeMovement(board, playerx - 1, playery )) {
-            newplayerx = playerx - 1;
-        } else if (input == 'q') {
-            saveGameState(board);
-            System.exit(0);
-        }
-        if (newplayerx != playerx || newplayery != playery) {
-            board[playerx][playery] = Tileset.FLOOR;
-            board[newplayerx][newplayery] = Tileset.PLAYER;
-            ter.renderFrame(board);
-        }
-        return new Integer[] {newplayerx, newplayery};
-    }
-
-    private Integer[] findFloor(TETile[][] board) {
-        for (int i = 0; i < WIDTH; i += 1) {
-            for (int j = 0; j < HEIGHT; j += 1) {
-                if (board[i][j] == Tileset.FLOOR) {
-                    return new Integer[] {i, j};
-                }
-            }
-        }
-        return null;
-    }
-
-    private boolean safeMovement(TETile[][] board, int playerx, int playery) {
-        if (board[playerx][playery] == Tileset.WALL) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -180,75 +71,52 @@ public class Game {
 
         TETile[][] tiles = new TETile[WIDTH][HEIGHT];
 
-        input = input.toUpperCase();
-        int length = input.length();
         String firstLetter = input.substring(0, 1);
 
         switch(firstLetter) {
-            case "N":
-                long seed = Long.parseLong(input.substring(1, input.indexOf("S")));
+            case "n":
+                ter.initialize(WIDTH, HEIGHT + 5);
+                long seed = Long.parseLong(input.substring(1, input.indexOf("s")));
                 WorldGen world = new WorldGen(tiles, seed, Tileset.FLOOR, Tileset.WALL);
                 world.makeRooms(tiles);
                 world.makeHallways();
+                input = input.substring(input.indexOf("s") + 1, input.length());
                 break;
-            case "L":
+            case "l":
                 try {
-                    tiles = loadGameState();
-                    break;
-                } catch (NullPointerException e) {
-                    System.out.println("No saved world");
+                    File f = new File("./gameState.ser");
+                    FileInputStream fs = new FileInputStream(f);
+                    tiles = SaveAndLoadStream.loadGameState(fs);
+                    input = input.substring(1, input.length());
+                } catch (FileNotFoundException e) {
+                    input = input.substring(1, input.length());
+                    tiles = playWithInputString(DisplayMethods.noSavedState(ter));
                 }
+                break;
+            case "q":
+                tiles = null;
         }
-        if (input.substring(length - 2).equals(":Q")) {
-            saveGameState(tiles);
+        Integer[] location1 = HelperMethods.findOrMakePlayer(tiles, seed, Tileset.PLAYER1);
+        Integer[] location2 = HelperMethods.findOrMakePlayer(tiles, seed, Tileset.PLAYER2);
+        while (!input.equals("") && !input.equals(":q")) {
+            location1 = HelperMethods.player1MovementWithInput(tiles, location1, input.charAt(0));
+            location2 = HelperMethods.player2MovementWithInput(tiles, location2, input.charAt(0));
+            HelperMethods.updateFlagnoshow(tiles);
+            input = input.substring(1, input.length());
         }
+
+        if (input.length() >= 2 && input.substring(input.length() - 2).equals(":q")) {
+            SaveAndLoadStream.saveGameState(tiles);
+        }
+
         return tiles;
-    }
-
-    private void saveGameState(TETile[][] world) {
-        File f = new File("./gameState.ser");
-        try {
-            if (!f.exists()) {
-                f.createNewFile();
-            }
-            FileOutputStream fs = new FileOutputStream(f);
-            ObjectOutputStream os = new ObjectOutputStream(fs);
-            os.writeObject(world);
-            os.close();
-        }  catch (FileNotFoundException e) {
-            System.out.println("file not found");
-            System.exit(0);
-        } catch (IOException e) {
-            System.out.println(e);
-            System.exit(0);
-        }
-    }
-
-    private TETile[][] loadGameState() {
-        File f = new File("./gameState.ser");
-        if (f.exists()) {
-            try {
-                FileInputStream fs = new FileInputStream(f);
-                ObjectInputStream os = new ObjectInputStream(fs);
-                TETile[][] loadWorld = (TETile[][]) os.readObject();
-                os.close();
-                return loadWorld;
-            } catch (FileNotFoundException e) {
-                System.out.println("file not found");
-                System.exit(0);
-            } catch (IOException e) {
-                System.out.println(e);
-                System.exit(0);
-            } catch (ClassNotFoundException e) {
-                System.out.println("class not found");
-                System.exit(0);
-            }
-        }
-        return null;
     }
 
     public static void main(String[] args) {
         Game g = new Game();
+        //n98437swwikjlsokwedwd
+        //TETile[][] w = g.playWithInputString("n98437swwikjlsokwedwd");
+        //g.ter.renderFrame(w);
         g.playWithKeyboard();
     }
 }
