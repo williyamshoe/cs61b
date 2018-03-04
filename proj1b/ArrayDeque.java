@@ -132,5 +132,4 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         return values[changeIndex(nfirst, 1 + index)];
     }
-
 }
