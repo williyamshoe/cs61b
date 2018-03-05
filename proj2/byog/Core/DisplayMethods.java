@@ -131,15 +131,15 @@ public class DisplayMethods {
         StdDraw.setFont(new Font("Monospaced", Font.PLAIN, 19));
         StdDraw.text(25, 0.75 * 30, "This is a 2 player game, where each player's objective is to");
         StdDraw.text(25, 0.70 * 30, "capture randomly generated flags in a randomly generated");
-        StdDraw.text(25, 0.65 * 30, "world. Player 1's movement controls are (w)(a)(s)(d)" +
-                ", while player");
-        StdDraw.text(25, 0.60 * 30, "2's are (i)(j)(k)(l). First one to capture 10 " +
-                "flags is the winner.");
+        StdDraw.text(25, 0.65 * 30, "world. Player 1's movement controls are (w)(a)(s)(d)"
+                + ", while player");
+        StdDraw.text(25, 0.60 * 30, "2's are (i)(j)(k)(l). First one to capture 10 "
+                + "flags is the winner.");
         StdDraw.text(25, 0.50 * 30, "Additionally, each player can also place blocks to stun the");
-        StdDraw.text(25, 0.45 * 30, "opponent, with the keys (e) and (o), respectively" +
-                ", to drop the");
-        StdDraw.text(25, 0.40 * 30, "block at the current location of the player. " +
-                "The more flags you");
+        StdDraw.text(25, 0.45 * 30, "opponent, with the keys (e) and (o), respectively"
+                + ", to drop the");
+        StdDraw.text(25, 0.40 * 30, "block at the current location of the player. "
+                + "The more flags you");
         StdDraw.text(25, 0.35 * 30, "collect, the more stun blocks you can place!");
         StdDraw.setPenColor(Color.cyan);
         StdDraw.setFont(new Font("Monospaced", Font.PLAIN, 23));
@@ -176,11 +176,13 @@ public class DisplayMethods {
                 String typed = (StdDraw.nextKeyTyped() + "").toUpperCase();
                 switch (typed) {
                     case "N":
+                        HelperMethods.newseed = true;
                         s = drawQueue();
                         seed = "n" + s + "s";
                         pressed = true;
                         break;
                     case "L":
+                        HelperMethods.newseed = false;
                         seed = "l";
                         pressed = true;
                         break;

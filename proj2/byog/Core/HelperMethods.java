@@ -13,7 +13,7 @@ public class HelperMethods {
     private static final int HEIGHT = 30;
 
     private static boolean striggered = false;
-    private static Integer[] flag = null;
+    protected static Integer[] flag = null;
 
     protected static int flagcount1 = 0;
     protected static int flagcount2 = 0;
@@ -33,10 +33,12 @@ public class HelperMethods {
     protected static long seed;
     protected static Random ran = null;
 
+    protected static boolean newseed = false;
+
     protected static Integer[] findOrMakePlayer(TETile[][] board, long s, TETile tile) {
         Integer[] location = null;
         HelperMethods.seed = s;
-        if (ran == null) {
+        if (newseed) {
             ran = new Random(seed);
         }
         for (int i = 0; i < WIDTH; i += 1) {
@@ -64,7 +66,7 @@ public class HelperMethods {
     }
 
     protected static void updateFlag(TETile[][] board, TERenderer ter) {
-        if (flag == null) {
+        if (newseed) {
             flag = findOrMakePlayer(board, seed, Tileset.FLAG);
             ter.renderFrame(board);
         } else if (board[flag[0]][flag[1]].description().equals("player1")) {
@@ -83,7 +85,7 @@ public class HelperMethods {
     }
 
     protected static void updateFlagnoshow(TETile[][] board) {
-        if (flag == null) {
+        if (newseed) {
             flag = findOrMakePlayer(board, seed, Tileset.FLAG);
         } else if (board[flag[0]][flag[1]].description().equals("player1")) {
             flagcount1 += 1;
@@ -96,16 +98,16 @@ public class HelperMethods {
         }
     }
 
-    protected static Integer[][] movement(TETile[][] board, Integer[][] loc, TERenderer ter) {
+    protected static Integer[][] move(TETile[][] b, Integer[][] l, TERenderer t) {
         if (!StdDraw.hasNextKeyTyped()) {
-            return loc;
+            return l;
         }
         char c = StdDraw.nextKeyTyped();
 
-        int player1x = loc[0][0];
-        int player1y = loc[0][1];
-        int player2x = loc[1][0];
-        int player2y = loc[1][1];
+        int player1x = l[0][0];
+        int player1y = l[0][1];
+        int player2x = l[1][0];
+        int player2y = l[1][1];
 
         int newplayer1x = player1x;
         int newplayer1y = player1y;
@@ -113,14 +115,14 @@ public class HelperMethods {
         int newplayer2y = player2y;
 
         if (!stunned1) {
-            if (StdDraw.isKeyPressed(87) && safeMovement(board, player1x, player1y + 1)) {
+            if (StdDraw.isKeyPressed(87) && safeMovement(b, player1x, player1y + 1)) {
                 newplayer1y = player1y + 1;
-            } else if (StdDraw.isKeyPressed(68) && safeMovement(board, player1x + 1, player1y)) {
+            } else if (StdDraw.isKeyPressed(68) && safeMovement(b, player1x + 1, player1y)) {
                 newplayer1x = player1x + 1;
-            } else if (StdDraw.isKeyPressed(65) && safeMovement(board, player1x - 1, player1y)) {
+            } else if (StdDraw.isKeyPressed(65) && safeMovement(b, player1x - 1, player1y)) {
                 newplayer1x = player1x - 1;
             } else if (((!striggered && c == 's') || (striggered && StdDraw.isKeyPressed(83)))
-                    && safeMovement(board, player1x, player1y - 1)) {
+                    && safeMovement(b, player1x, player1y - 1)) {
                 newplayer1y = player1y - 1;
                 striggered = true;
             } else if (StdDraw.isKeyPressed(69) && blockedleft1 > 0) {
@@ -128,18 +130,18 @@ public class HelperMethods {
                 blockedtrig1 = true;
             }
             if (newplayer1x != player1x || newplayer1y != player1y) {
-                TETile tile = board[player1x][player1y];
-                TETile newtile = board[newplayer1x][newplayer1y];
+                TETile tile = b[player1x][player1y];
+                TETile newtile = b[newplayer1x][newplayer1y];
                 if (blockedtrig1) {
                     blockedtrig1 = false;
-                    board[player1x][player1y] = Tileset.WALLBLOCK1;
+                    b[player1x][player1y] = Tileset.WALLBLOCK1;
                 } else {
-                    board[player1x][player1y] = Tileset.FLOOR;
+                    b[player1x][player1y] = Tileset.FLOOR;
                 }
                 if (newtile.description().equals("stun2")) {
                     stunned1 = true;
                 }
-                board[newplayer1x][newplayer1y] = tile;
+                b[newplayer1x][newplayer1y] = tile;
             }
         } else {
             if (stunCountdown1 == 0) {
@@ -150,36 +152,36 @@ public class HelperMethods {
         }
 
         if (StdDraw.isKeyPressed(81)) {
-            SaveAndLoadStream.saveGameState(board);
+            SaveAndLoadStream.saveGameState(b);
             System.exit(0);
         }
 
         if (!stunned2) {
-            if (StdDraw.isKeyPressed(73) && safeMovement(board, player2x, player2y + 1)) {
+            if (StdDraw.isKeyPressed(73) && safeMovement(b, player2x, player2y + 1)) {
                 newplayer2y = player2y + 1;
-            } else if (StdDraw.isKeyPressed(76) && safeMovement(board, player2x + 1, player2y)) {
+            } else if (StdDraw.isKeyPressed(76) && safeMovement(b, player2x + 1, player2y)) {
                 newplayer2x = player2x + 1;
-            } else if (StdDraw.isKeyPressed(74) && safeMovement(board, player2x - 1, player2y)) {
+            } else if (StdDraw.isKeyPressed(74) && safeMovement(b, player2x - 1, player2y)) {
                 newplayer2x = player2x - 1;
-            } else if (StdDraw.isKeyPressed(75) && safeMovement(board, player2x, player2y - 1)) {
+            } else if (StdDraw.isKeyPressed(75) && safeMovement(b, player2x, player2y - 1)) {
                 newplayer2y = player2y - 1;
             } else if (StdDraw.isKeyPressed(79) && blockedleft2 > 0) {
                 blockedleft2 -= 1;
                 blockedtrig2 = true;
             }
             if (newplayer2x != player2x || newplayer2y != player2y) {
-                TETile tile = board[player2x][player2y];
-                TETile newtile = board[newplayer2x][newplayer2y];
+                TETile tile = b[player2x][player2y];
+                TETile newtile = b[newplayer2x][newplayer2y];
                 if (blockedtrig2) {
                     blockedtrig2 = false;
-                    board[player2x][player2y] = Tileset.WALLBLOCK2;
+                    b[player2x][player2y] = Tileset.WALLBLOCK2;
                 } else {
-                    board[player2x][player2y] = Tileset.FLOOR;
+                    b[player2x][player2y] = Tileset.FLOOR;
                 }
                 if (newtile.description().equals("stun1")) {
                     stunned2 = true;
                 }
-                board[newplayer2x][newplayer2y] = tile;
+                b[newplayer2x][newplayer2y] = tile;
             }
         } else {
             if (stunCountdown2 == 0) {
@@ -191,7 +193,7 @@ public class HelperMethods {
 
         if (newplayer2x != player2x || newplayer2y != player2y
                 || newplayer1x != player1x || newplayer1y != player1y) {
-            ter.renderFrame(board);
+            t.renderFrame(b);
         }
         return new Integer[][]{{newplayer1x, newplayer1y}, {newplayer2x, newplayer2y}};
     }

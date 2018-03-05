@@ -19,7 +19,8 @@ public class SaveAndLoadStream {
             HelperMethods.blockedleft2, HelperMethods.blockedtrig1,
             HelperMethods.blockedtrig2, HelperMethods.stunned1,
             HelperMethods.stunned2, HelperMethods.stunCountdown1,
-            HelperMethods.stunCountdown2, HelperMethods.ran, world};
+            HelperMethods.stunCountdown2, HelperMethods.ran, world,
+            HelperMethods.newseed, HelperMethods.flag};
         File f = new File("./gameState.ser");
         try {
             if (!f.exists()) {
@@ -55,6 +56,8 @@ public class SaveAndLoadStream {
             HelperMethods.stunCountdown2 = (int) details[10];
             HelperMethods.ran = (Random) details[11];
             TETile[][] loadWorld = (TETile[][]) details[12];
+            HelperMethods.newseed = (boolean) details[13];
+            HelperMethods.flag = (Integer[]) details[14];
             os.close();
             return loadWorld;
         } catch (IOException e) {

@@ -42,7 +42,7 @@ public class Game {
         StdDraw.enableDoubleBuffering();
         StdDraw.setPenColor(Color.WHITE);
         while (!finished) {
-            locations = HelperMethods.movement(board, locations, ter);
+            locations = HelperMethods.move(board, locations, ter);
             HelperMethods.updateFlag(board, ter);
             DisplayMethods.mouseMenu(board);
             StdDraw.show();
@@ -82,6 +82,7 @@ public class Game {
         switch (firstLetter) {
             case "n":
                 String s = input.substring(1, input.indexOf("s"));
+                HelperMethods.newseed = true;
                 this.seed = Long.parseLong(s);
                 WorldGen world = new WorldGen(tiles, seed, Tileset.FLOOR, Tileset.WALL);
                 world.makeRooms(tiles);
@@ -90,6 +91,7 @@ public class Game {
                 break;
             case "l":
                 try {
+                    HelperMethods.newseed = false;
                     File f = new File("./gameState.ser");
                     FileInputStream fs = new FileInputStream(f);
                     tiles = SaveAndLoadStream.loadGameState(fs);
@@ -121,11 +123,19 @@ public class Game {
 
     private static void main(String[] args) {
         Game g = new Game();
-        //TERenderer ter = new TERenderer();
+        g.ter = new TERenderer();
+        g.ter.initialize(WIDTH, HEIGHT + 5);
         //n98437swwikjlsokwedwdi:q
         //laaaawwllllkikkkssssaaaaew
-        //TETile[][] w = g.playWithInputString("n7313251667695476404sasd");
-        //ter.renderFrame(w);
-        g.playWithKeyboard();
+        //TETile[][] w = g.playWithInputString("n5513998301767302084swwadsa");
+        //g.ter.renderFrame(w);
+        //n4031671086352609271saasaasdaw
+        //n4031671086352609271saasaasdaw
+        //g.playWithKeyboard();
+        //StdDraw.pause(1000);
+        //StdDraw.clear(Color.BLACK);
+        //StdDraw.pause(1000);
+        TETile[][] x = g.playWithInputString("lwadsw");
+        g.ter.renderFrame(x);
     }
 }
