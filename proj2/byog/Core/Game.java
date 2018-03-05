@@ -125,17 +125,15 @@ public class Game {
         Game g = new Game();
         g.ter = new TERenderer();
         g.ter.initialize(WIDTH, HEIGHT + 5);
-        //n98437swwikjlsokwedwdi:q
-        //laaaawwllllkikkkssssaaaaew
-        //TETile[][] w = g.playWithInputString("n5513998301767302084swwadsa");
-        //g.ter.renderFrame(w);
-        //n4031671086352609271saasaasdaw
-        //n4031671086352609271saasaasdaw
-        //g.playWithKeyboard();
-        //StdDraw.pause(1000);
-        //StdDraw.clear(Color.BLACK);
-        //StdDraw.pause(1000);
-        TETile[][] x = g.playWithInputString("lwadsw");
+        TETile[][] x = g.playWithInputString("n247023630810299812saawssdwdw");
         g.ter.renderFrame(x);
+
+        StdDraw.pause(5000);
+        StdDraw.clear();
+
+        g.playWithInputString("n247023630810299812saawssdwd:q");
+        TETile[][] xyz = g.playWithInputString("lw");
+        g.ter.initialize(WIDTH, HEIGHT + 5);
+        g.ter.renderFrame(xyz);
     }
 }
