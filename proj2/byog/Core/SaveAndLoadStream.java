@@ -2,18 +2,24 @@ package byog.Core;
 
 import byog.TileEngine.TETile;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 import java.util.Random;
 
 public class SaveAndLoadStream {
     protected static void saveGameState(TETile[][] world) {
         Object[] details = new Object[] {HelperMethods.seed, HelperMethods.flagcount1,
-                HelperMethods.flagcount2, HelperMethods.blockedleft1,
-                HelperMethods.blockedleft2, HelperMethods.blockedtrig1,
-                HelperMethods.blockedtrig2, HelperMethods.stunned1,
-                HelperMethods.stunned2, HelperMethods.stunCountdown1,
-                HelperMethods.stunCountdown2, HelperMethods.ran, world};
+            HelperMethods.flagcount2, HelperMethods.blockedleft1,
+            HelperMethods.blockedleft2, HelperMethods.blockedtrig1,
+            HelperMethods.blockedtrig2, HelperMethods.stunned1,
+            HelperMethods.stunned2, HelperMethods.stunCountdown1,
+            HelperMethods.stunCountdown2, HelperMethods.ran, world};
         File f = new File("./gameState.ser");
         try {
             if (!f.exists()) {

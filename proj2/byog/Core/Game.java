@@ -6,11 +6,13 @@ import byog.TileEngine.Tileset;
 import edu.princeton.cs.introcs.StdAudio;
 import edu.princeton.cs.introcs.StdDraw;
 
-import java.awt.*;
-import java.io.*;
+import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class Game {
-    private TERenderer ter = new TERenderer();
+    private TERenderer ter;
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
@@ -21,6 +23,7 @@ public class Game {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
+        ter = new TERenderer();
         StdAudio.loop("/audio/megalovania.wav");
         ter.initialize(30, 30);
         TETile[][] board = playWithInputString(DisplayMethods.drawMenu(ter));
@@ -38,12 +41,12 @@ public class Game {
 
         StdDraw.enableDoubleBuffering();
         StdDraw.setPenColor(Color.WHITE);
-        while(!finished) {
-            locations = HelperMethods.playersMovement(board, locations, ter);
+        while (!finished) {
+            locations = HelperMethods.movement(board, locations, ter);
             HelperMethods.updateFlag(board, ter);
             DisplayMethods.mouseMenu(board);
             StdDraw.show();
-            if (HelperMethods.flagcount1 >= 10){
+            if (HelperMethods.flagcount1 >= 10) {
                 ter.initialize(30, 30);
                 DisplayMethods.win(1);
                 finished = true;
@@ -76,11 +79,10 @@ public class Game {
 
         String firstLetter = input.substring(0, 1);
 
-        switch(firstLetter) {
+        switch (firstLetter) {
             case "n":
-                ter.initialize(WIDTH, HEIGHT + 5);
                 String s = input.substring(1, input.indexOf("s"));
-                long seed = Long.parseLong(s);
+                this.seed = Long.parseLong(s);
                 WorldGen world = new WorldGen(tiles, seed, Tileset.FLOOR, Tileset.WALL);
                 world.makeRooms(tiles);
                 world.makeHallways();
@@ -91,7 +93,6 @@ public class Game {
                     File f = new File("./gameState.ser");
                     FileInputStream fs = new FileInputStream(f);
                     tiles = SaveAndLoadStream.loadGameState(fs);
-                    ter.initialize(WIDTH, HEIGHT + 5);
                     input = input.substring(1, input.length());
                 } catch (FileNotFoundException e) {
                     input = input.substring(1, input.length());
@@ -100,6 +101,7 @@ public class Game {
                 break;
             case "q":
                 tiles = null;
+            default:
         }
         Integer[] location1 = HelperMethods.findOrMakePlayer(tiles, seed, Tileset.PLAYER1);
         Integer[] location2 = HelperMethods.findOrMakePlayer(tiles, seed, Tileset.PLAYER2);
@@ -119,10 +121,11 @@ public class Game {
 
     private static void main(String[] args) {
         Game g = new Game();
+        //TERenderer ter = new TERenderer();
         //n98437swwikjlsokwedwdi:q
         //laaaawwllllkikkkssssaaaaew
-        TETile[][] w = g.playWithInputString("7313251667695476404sasd");
-        g.ter.renderFrame(w);
-        //g.playWithKeyboard();
+        //TETile[][] w = g.playWithInputString("n7313251667695476404sasd");
+        //ter.renderFrame(w);
+        g.playWithKeyboard();
     }
 }

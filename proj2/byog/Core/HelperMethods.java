@@ -33,16 +33,16 @@ public class HelperMethods {
     protected static long seed;
     protected static Random ran = null;
 
-    protected static Integer[] findOrMakePlayer(TETile[][] board, long seed, TETile tile) {
+    protected static Integer[] findOrMakePlayer(TETile[][] board, long s, TETile tile) {
         Integer[] location = null;
-        HelperMethods.seed = seed;
+        HelperMethods.seed = s;
         if (ran == null) {
             ran = new Random(seed);
         }
         for (int i = 0; i < WIDTH; i += 1) {
             for (int j = 0; j < HEIGHT; j += 1) {
                 if (board[i][j].description().equals(tile.description())) {
-                    location = new Integer[] {i ,j};
+                    location = new Integer[] {i, j};
                 }
             }
         }
@@ -96,16 +96,16 @@ public class HelperMethods {
         }
     }
 
-    protected static Integer[][] playersMovement(TETile[][] board, Integer[][] locations, TERenderer ter) {
+    protected static Integer[][] movement(TETile[][] board, Integer[][] loc, TERenderer ter) {
         if (!StdDraw.hasNextKeyTyped()) {
-            return locations;
+            return loc;
         }
         char c = StdDraw.nextKeyTyped();
 
-        int player1x = locations[0][0];
-        int player1y = locations[0][1];
-        int player2x = locations[1][0];
-        int player2y = locations[1][1];
+        int player1x = loc[0][0];
+        int player1y = loc[0][1];
+        int player2x = loc[1][0];
+        int player2y = loc[1][1];
 
         int newplayer1x = player1x;
         int newplayer1y = player1y;
@@ -119,8 +119,8 @@ public class HelperMethods {
                 newplayer1x = player1x + 1;
             } else if (StdDraw.isKeyPressed(65) && safeMovement(board, player1x - 1, player1y)) {
                 newplayer1x = player1x - 1;
-            } else if (((!striggered && c == 's') || (striggered && StdDraw.isKeyPressed(83))) &&
-                    safeMovement(board, player1x, player1y - 1)) {
+            } else if (((!striggered && c == 's') || (striggered && StdDraw.isKeyPressed(83)))
+                    && safeMovement(board, player1x, player1y - 1)) {
                 newplayer1y = player1y - 1;
                 striggered = true;
             } else if (StdDraw.isKeyPressed(69) && blockedleft1 > 0) {
@@ -189,30 +189,31 @@ public class HelperMethods {
             stunCountdown2 -= 1;
         }
 
-        if (newplayer2x != player2x || newplayer2y != player2y || newplayer1x != player1x || newplayer1y != player1y) {
+        if (newplayer2x != player2x || newplayer2y != player2y
+                || newplayer1x != player1x || newplayer1y != player1y) {
             ter.renderFrame(board);
         }
         return new Integer[][]{{newplayer1x, newplayer1y}, {newplayer2x, newplayer2y}};
     }
 
-    protected static Integer[] player1MovementWithInput(TETile[][] board, Integer[] location, char input) {
-        int playerx = location[0];
-        int playery = location[1];
+    protected static Integer[] player1MovementWithInput(TETile[][] board, Integer[] loc, char i) {
+        int playerx = loc[0];
+        int playery = loc[1];
 
         int newplayerx = playerx;
         int newplayery = playery;
 
         if (!stunned1) {
-            if (input == 'w' && safeMovement(board, playerx, playery + 1)) {
+            if (i == 'w' && safeMovement(board, playerx, playery + 1)) {
                 newplayery = playery + 1;
-            } else if (input == 'd' && safeMovement(board, playerx + 1, playery)) {
+            } else if (i == 'd' && safeMovement(board, playerx + 1, playery)) {
                 newplayerx = playerx + 1;
-            } else if (input == 'a' && safeMovement(board, playerx - 1, playery)) {
+            } else if (i == 'a' && safeMovement(board, playerx - 1, playery)) {
                 newplayerx = playerx - 1;
-            } else if (input == 's' && safeMovement(board, playerx, playery - 1)) {
+            } else if (i == 's' && safeMovement(board, playerx, playery - 1)) {
                 newplayery = playery - 1;
                 striggered = true;
-            } else if (input == 'e' && blockedleft1 > 0) {
+            } else if (i == 'e' && blockedleft1 > 0) {
                 blockedleft1 -= 1;
                 blockedtrig1 = true;
             }
@@ -242,24 +243,24 @@ public class HelperMethods {
         return new Integer[] {newplayerx, newplayery};
     }
 
-    protected static Integer[] player2MovementWithInput(TETile[][] board, Integer[] location, char input) {
-        int playerx = location[0];
-        int playery = location[1];
+    protected static Integer[] player2MovementWithInput(TETile[][] board, Integer[] loc, char i) {
+        int playerx = loc[0];
+        int playery = loc[1];
 
         int newplayerx = playerx;
         int newplayery = playery;
 
         if (!stunned2) {
-            if (input == 'i' && safeMovement(board, playerx, playery + 1)) {
+            if (i == 'i' && safeMovement(board, playerx, playery + 1)) {
                 newplayery = playery + 1;
-            } else if (input == 'l' && safeMovement(board, playerx + 1, playery)) {
+            } else if (i == 'l' && safeMovement(board, playerx + 1, playery)) {
                 newplayerx = playerx + 1;
-            } else if (input == 'j' && safeMovement(board, playerx - 1, playery)) {
+            } else if (i == 'j' && safeMovement(board, playerx - 1, playery)) {
                 newplayerx = playerx - 1;
-            } else if (input == 'k' && safeMovement(board, playerx, playery - 1)) {
+            } else if (i == 'k' && safeMovement(board, playerx, playery - 1)) {
                 newplayery = playery - 1;
                 striggered = true;
-            } else if (input == 'o' && blockedleft2 > 0) {
+            } else if (i == 'o' && blockedleft2 > 0) {
                 blockedleft2 -= 1;
                 blockedtrig2 = true;
             }
@@ -289,8 +290,8 @@ public class HelperMethods {
     }
 
     private static boolean safeMovement(TETile[][] board, int playerx, int playery) {
-        return !board[playerx][playery].description().equals("wall") &&
-                !board[playerx][playery].description().equals("player1") &&
-                !board[playerx][playery].description().equals("player2");
+        return !board[playerx][playery].description().equals("wall")
+                && !board[playerx][playery].description().equals("player1")
+                && !board[playerx][playery].description().equals("player2");
     }
 }
