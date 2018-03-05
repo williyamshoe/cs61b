@@ -116,12 +116,12 @@ public class Game {
         return tiles;
     }
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         Game g = new Game();
         //n98437swwikjlsokwedwdi:q
         //laaaawwllllkikkkssssaaaaew
-        //TETile[][] w = g.playWithInputString("laaaawwllllkikkkssssaaaaew");
-        //g.ter.renderFrame(w);
-        g.playWithKeyboard();
+        TETile[][] w = g.playWithInputString("n8772076153521736045sawsasdsadwwwwsa");
+        g.ter.renderFrame(w);
+        //g.playWithKeyboard();
     }
 }
