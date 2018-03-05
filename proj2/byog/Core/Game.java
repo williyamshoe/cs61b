@@ -122,21 +122,21 @@ public class Game {
         return tiles;
     }
 
-    private static void main(String[] args) {
+    public static void main(String[] args) {
         Game g = new Game();
         g.ter = new TERenderer();
-        //g.ter.initialize(WIDTH, HEIGHT);
-        TETile[][] x = g.playWithInputString("n2470236310810299812saawssdwds");
-        //g.ter.renderFrame(x);
+        g.ter.initialize(WIDTH, HEIGHT);
+        TETile[][] x = g.playWithInputString("n2470236310810299812saawssdwd");
+        g.ter.renderFrame(x);
 
-        //StdDraw.pause(3000);
+        StdDraw.pause(3000);
 
-        //g.ter = new TERenderer();
+        g.ter = new TERenderer();
         Game w = new Game();
         w.playWithInputString("n2470236310810299812saawssdwd:q");
-        TETile[][] xyz = w.playWithInputString("ls");
-        //g.ter.initialize(WIDTH, HEIGHT);
-        //g.ter.renderFrame(xyz);
+        TETile[][] xyz = w.playWithInputString("l");
+        g.ter.initialize(WIDTH, HEIGHT);
+        g.ter.renderFrame(xyz);
 
         for (int i = 0; i < WIDTH; i += 1) {
             for (int j = 0; j < HEIGHT; j += 1) {
