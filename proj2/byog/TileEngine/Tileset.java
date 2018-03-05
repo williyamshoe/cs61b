@@ -21,8 +21,8 @@ public class Tileset {
     public static final TETile PLAYER1 = new TETile('♚', Color.cyan, Color.black, "player1");
     public static final TETile PLAYER2 = new TETile('♚', Color.orange, Color.black, "player2");
     public static final TETile WALL = new TETile('#', c, Color.darkGray, "wall");
-    public static final TETile WALLBLOCK1 = new TETile('█', Color.cyan, Color.black, "stun1");
-    public static final TETile WALLBLOCK2 = new TETile('█', Color.orange, Color.black, "stun2");
+    public static final TETile WALLBLOCK1 = new TETile('⚡', Color.black, Color.cyan, "stun1");
+    public static final TETile WALLBLOCK2 = new TETile('⚡', Color.black, Color.orange, "stun2");
     public static final TETile FLOOR = new TETile('·', new Color(128, 192, 128), Color.black,
             "floor");
     public static final TETile NOTHING = new TETile(' ', Color.black, Color.black, "nothing");

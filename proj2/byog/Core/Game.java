@@ -12,7 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class Game {
-    private TERenderer ter;
+    private TERenderer ter = null;
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 30;
@@ -23,7 +23,9 @@ public class Game {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
-        ter = new TERenderer();
+        if (ter == null) {
+            ter = new TERenderer();
+        }
         StdAudio.loop("/audio/megalovania.wav");
         ter.initialize(30, 30);
         TETile[][] board = playWithInputString(DisplayMethods.drawMenu(ter));
@@ -124,26 +126,6 @@ public class Game {
 
     public static void main(String[] args) {
         Game g = new Game();
-        g.ter = new TERenderer();
-        g.ter.initialize(WIDTH, HEIGHT);
-        TETile[][] x = g.playWithInputString("n2470236310810299812saawssdwd");
-        g.ter.renderFrame(x);
-
-        StdDraw.pause(3000);
-
-        g.ter = new TERenderer();
-        Game w = new Game();
-        w.playWithInputString("n2470236310810299812saawssdwd:q");
-        TETile[][] xyz = w.playWithInputString("l");
-        g.ter.initialize(WIDTH, HEIGHT);
-        g.ter.renderFrame(xyz);
-
-        for (int i = 0; i < WIDTH; i += 1) {
-            for (int j = 0; j < HEIGHT; j += 1) {
-                if (!x[i][j].equals(xyz[i][j])) {
-                    System.out.println(i + ", " + j);
-                }
-            }
-        }
+        g.playWithKeyboard();
     }
 }

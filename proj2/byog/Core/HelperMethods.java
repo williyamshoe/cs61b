@@ -68,6 +68,7 @@ public class HelperMethods {
     protected static void updateFlag(TETile[][] board, TERenderer ter) {
         if (newseed) {
             flag = findOrMakePlayer(board, seed, Tileset.FLAG);
+            newseed = false;
             ter.renderFrame(board);
         } else if (board[flag[0]][flag[1]].description().equals("player1")) {
             StdAudio.play("/audio/claptrimmed.wav");
@@ -126,7 +127,20 @@ public class HelperMethods {
                 blockedleft1 -= 1;
                 blockedtrig1 = true;
             }
-            checkDifference1(newplayer1x, newplayer1y, player1x, player1y, b);
+            if (newplayer1x != player1x || newplayer1y != player1y) {
+                TETile tile = b[player1x][player1y];
+                TETile newtile = b[newplayer1x][newplayer1y];
+                if (blockedtrig1) {
+                    blockedtrig1 = false;
+                    b[player1x][player1y] = Tileset.WALLBLOCK1;
+                } else {
+                    b[player1x][player1y] = Tileset.FLOOR;
+                }
+                if (newtile.description().equals("stun2")) {
+                    stunned1 = true;
+                }
+                b[newplayer1x][newplayer1y] = tile;
+            }
         } else {
             if (stunCountdown1 == 0) {
                 stunned1 = false;
@@ -148,7 +162,20 @@ public class HelperMethods {
                 blockedleft2 -= 1;
                 blockedtrig2 = true;
             }
-            checkDifference2(newplayer2x, newplayer2y, player2x, player2y, b);
+            if (newplayer2x != player2x || newplayer2y != player2y) {
+                TETile tile = b[player2x][player2y];
+                TETile newtile = b[newplayer2x][newplayer2y];
+                if (blockedtrig2) {
+                    blockedtrig2 = false;
+                    b[player2x][player2y] = Tileset.WALLBLOCK2;
+                } else {
+                    b[player2x][player2y] = Tileset.FLOOR;
+                }
+                if (newtile.description().equals("stun1")) {
+                    stunned2 = true;
+                }
+                b[newplayer2x][newplayer2y] = tile;
+            }
         } else {
             if (stunCountdown2 == 0) {
                 stunned2 = false;
@@ -163,44 +190,10 @@ public class HelperMethods {
         return new Integer[][]{{newplayer1x, newplayer1y}, {newplayer2x, newplayer2y}};
     }
 
-    private static void checkQuit(TETile[][] b) {
+    private static void checkQuit(TETile[][] b){
         if (StdDraw.isKeyPressed(81)) {
             SaveAndLoadStream.saveGameState(b);
             System.exit(0);
-        }
-    }
-
-    private static void checkDifference1(int nx, int ny, int x, int y, TETile[][] b) {
-        if (nx != x || ny != y) {
-            TETile tile = b[x][y];
-            TETile newtile = b[nx][ny];
-            if (blockedtrig1) {
-                blockedtrig1 = false;
-                b[x][y] = Tileset.WALLBLOCK1;
-            } else {
-                b[x][y] = Tileset.FLOOR;
-            }
-            if (newtile.description().equals("stun2")) {
-                stunned1 = true;
-            }
-            b[nx][ny] = tile;
-        }
-    }
-
-    private static void checkDifference2(int nx, int ny, int x, int y, TETile[][] b) {
-        if (nx != x || ny != y) {
-            TETile tile = b[x][y];
-            TETile newtile = b[nx][ny];
-            if (blockedtrig2) {
-                blockedtrig2 = false;
-                b[x][y] = Tileset.WALLBLOCK2;
-            } else {
-                b[x][y] = Tileset.FLOOR;
-            }
-            if (newtile.description().equals("stun1")) {
-                stunned2 = true;
-            }
-            b[nx][ny] = tile;
         }
     }
 
