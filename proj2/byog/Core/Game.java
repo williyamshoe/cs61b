@@ -79,7 +79,8 @@ public class Game {
         switch(firstLetter) {
             case "n":
                 ter.initialize(WIDTH, HEIGHT + 5);
-                long seed = Long.parseLong(input.substring(1, input.indexOf("s")));
+                String s = input.substring(1, input.indexOf("s"));
+                long seed = Long.parseLong(s);
                 WorldGen world = new WorldGen(tiles, seed, Tileset.FLOOR, Tileset.WALL);
                 world.makeRooms(tiles);
                 world.makeHallways();
@@ -120,7 +121,7 @@ public class Game {
         Game g = new Game();
         //n98437swwikjlsokwedwdi:q
         //laaaawwllllkikkkssssaaaaew
-        TETile[][] w = g.playWithInputString("n8772076153521736045sawsasdsadwwwwsa");
+        TETile[][] w = g.playWithInputString("7313251667695476404sasd");
         g.ter.renderFrame(w);
         //g.playWithKeyboard();
     }
