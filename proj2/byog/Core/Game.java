@@ -103,6 +103,7 @@ public class Game {
                 break;
             case "q":
                 tiles = null;
+                break;
             default:
         }
         Integer[] location1 = HelperMethods.findOrMakePlayer(tiles, seed, Tileset.PLAYER1);
@@ -124,16 +125,25 @@ public class Game {
     private static void main(String[] args) {
         Game g = new Game();
         g.ter = new TERenderer();
-        g.ter.initialize(WIDTH, HEIGHT + 5);
-        TETile[][] x = g.playWithInputString("n247023630810299812saawssdwdw");
-        g.ter.renderFrame(x);
+        //g.ter.initialize(WIDTH, HEIGHT);
+        TETile[][] x = g.playWithInputString("n2470236310810299812saawssdwds");
+        //g.ter.renderFrame(x);
 
-        StdDraw.pause(5000);
-        StdDraw.clear();
+        //StdDraw.pause(3000);
 
-        g.playWithInputString("n247023630810299812saawssdwd:q");
-        TETile[][] xyz = g.playWithInputString("lw");
-        g.ter.initialize(WIDTH, HEIGHT + 5);
-        g.ter.renderFrame(xyz);
+        //g.ter = new TERenderer();
+        Game w = new Game();
+        w.playWithInputString("n2470236310810299812saawssdwd:q");
+        TETile[][] xyz = w.playWithInputString("ls");
+        //g.ter.initialize(WIDTH, HEIGHT);
+        //g.ter.renderFrame(xyz);
+
+        for (int i = 0; i < WIDTH; i += 1) {
+            for (int j = 0; j < HEIGHT; j += 1) {
+                if (!x[i][j].equals(xyz[i][j])) {
+                    System.out.println(i + ", " + j);
+                }
+            }
+        }
     }
 }

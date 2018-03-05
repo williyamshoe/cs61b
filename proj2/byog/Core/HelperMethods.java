@@ -103,17 +103,14 @@ public class HelperMethods {
             return l;
         }
         char c = StdDraw.nextKeyTyped();
-
         int player1x = l[0][0];
         int player1y = l[0][1];
         int player2x = l[1][0];
         int player2y = l[1][1];
-
         int newplayer1x = player1x;
         int newplayer1y = player1y;
         int newplayer2x = player2x;
         int newplayer2y = player2y;
-
         if (!stunned1) {
             if (StdDraw.isKeyPressed(87) && safeMovement(b, player1x, player1y + 1)) {
                 newplayer1y = player1y + 1;
@@ -150,12 +147,7 @@ public class HelperMethods {
             }
             stunCountdown1 -= 1;
         }
-
-        if (StdDraw.isKeyPressed(81)) {
-            SaveAndLoadStream.saveGameState(b);
-            System.exit(0);
-        }
-
+        checkQuit(b);
         if (!stunned2) {
             if (StdDraw.isKeyPressed(73) && safeMovement(b, player2x, player2y + 1)) {
                 newplayer2y = player2y + 1;
@@ -190,12 +182,18 @@ public class HelperMethods {
             }
             stunCountdown2 -= 1;
         }
-
         if (newplayer2x != player2x || newplayer2y != player2y
                 || newplayer1x != player1x || newplayer1y != player1y) {
             t.renderFrame(b);
         }
         return new Integer[][]{{newplayer1x, newplayer1y}, {newplayer2x, newplayer2y}};
+    }
+
+    private static void checkQuit(TETile[][] b){
+        if (StdDraw.isKeyPressed(81)) {
+            SaveAndLoadStream.saveGameState(b);
+            System.exit(0);
+        }
     }
 
     protected static Integer[] player1MovementWithInput(TETile[][] board, Integer[] loc, char i) {
