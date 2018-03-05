@@ -92,7 +92,7 @@ public class Game {
             case "l":
                 try {
                     HelperMethods.newseed = false;
-                    File f = new File("./gameState.ser");
+                    File f = new File("./gameState.txt");
                     FileInputStream fs = new FileInputStream(f);
                     tiles = SaveAndLoadStream.loadGameState(fs);
                     input = input.substring(1, input.length());

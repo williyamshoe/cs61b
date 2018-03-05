@@ -21,7 +21,7 @@ public class SaveAndLoadStream {
             HelperMethods.stunned2, HelperMethods.stunCountdown1,
             HelperMethods.stunCountdown2, HelperMethods.ran, world,
             HelperMethods.newseed, HelperMethods.flag};
-        File f = new File("./gameState.ser");
+        File f = new File("./gameState.txt");
         try {
             if (!f.exists()) {
                 f.createNewFile();
