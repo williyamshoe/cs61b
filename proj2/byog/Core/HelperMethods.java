@@ -57,8 +57,8 @@ public class HelperMethods {
 
     private static Integer[] findFloor(TETile[][] board) {
         while (true) {
-            int w = ran.nextInt(WIDTH + 1) - 1;
-            int h = ran.nextInt(HEIGHT + 1) - 1;
+            int w = ran.nextInt(WIDTH - 1);
+            int h = ran.nextInt(HEIGHT - 1);
             if (board[w][h].description().equals("floor")) {
                 return new Integer[] {w, h};
             }
