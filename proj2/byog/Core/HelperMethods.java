@@ -11,25 +11,27 @@ import java.util.Random;
 public class HelperMethods {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 30;
+
     private static boolean striggered = false;
     private static Integer[] flag = null;
+
     protected static int flagcount1 = 0;
     protected static int flagcount2 = 0;
 
-    private static int blockedleft1 = 1;
-    private static boolean blockedtrig1 = false;
+    protected static int blockedleft1 = 1;
+    protected static int blockedleft2 = 1;
 
-    private static int blockedleft2 = 1;
-    private static boolean blockedtrig2 = false;
+    protected static boolean blockedtrig1 = false;
+    protected static boolean blockedtrig2 = false;
 
-    private static boolean stunned1 = false;
-    private static boolean stunned2 = false;
+    protected static boolean stunned1 = false;
+    protected static boolean stunned2 = false;
 
-    private static int stunCountdown1 = 9;
-    private static int stunCountdown2 = 9;
+    protected static int stunCountdown1 = 9;
+    protected static int stunCountdown2 = 9;
 
-    private static long seed;
-    private static Random ran = null;
+    protected static long seed;
+    protected static Random ran = null;
 
     protected static Integer[] findOrMakePlayer(TETile[][] board, long seed, TETile tile) {
         Integer[] location = null;
@@ -63,34 +65,34 @@ public class HelperMethods {
 
     protected static void updateFlag(TETile[][] board, TERenderer ter) {
         if (flag == null) {
-            flag = findOrMakePlayer(board, seed, Tileset.FLOWER);
+            flag = findOrMakePlayer(board, seed, Tileset.FLAG);
             ter.renderFrame(board);
         } else if (board[flag[0]][flag[1]].description().equals("player1")) {
-            StdAudio.play("/byog/Core/claptrimmed.wav");
+            StdAudio.play("/audio/claptrimmed.wav");
             flagcount1 += 1;
             blockedleft1 += 1;
-            flag = findOrMakePlayer(board, seed, Tileset.FLOWER);
+            flag = findOrMakePlayer(board, seed, Tileset.FLAG);
             ter.renderFrame(board);
         } else if (board[flag[0]][flag[1]].description().equals("player2")) {
-            StdAudio.play("/byog/Core/claptrimmed.wav");
+            StdAudio.play("/audio/claptrimmed.wav");
             flagcount2 += 1;
             blockedleft2 += 1;
-            flag = findOrMakePlayer(board, seed, Tileset.FLOWER);
+            flag = findOrMakePlayer(board, seed, Tileset.FLAG);
             ter.renderFrame(board);
         }
     }
 
     protected static void updateFlagnoshow(TETile[][] board) {
         if (flag == null) {
-            flag = findOrMakePlayer(board, seed, Tileset.FLOWER);
+            flag = findOrMakePlayer(board, seed, Tileset.FLAG);
         } else if (board[flag[0]][flag[1]].description().equals("player1")) {
             flagcount1 += 1;
             blockedleft1 += 1;
-            flag = findOrMakePlayer(board, seed, Tileset.FLOWER);
+            flag = findOrMakePlayer(board, seed, Tileset.FLAG);
         } else if (board[flag[0]][flag[1]].description().equals("player2")) {
             flagcount2 += 1;
             blockedleft2 += 1;
-            flag = findOrMakePlayer(board, seed, Tileset.FLOWER);
+            flag = findOrMakePlayer(board, seed, Tileset.FLAG);
         }
     }
 

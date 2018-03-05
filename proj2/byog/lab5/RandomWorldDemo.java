@@ -35,7 +35,7 @@ public class RandomWorldDemo {
      *  chance of being empty space.
      */
     public static TETile randomTile() {
-        int tileNum = RANDOM.nextInt(8);
+        int tileNum = RANDOM.nextInt(9);
         switch (tileNum) {
             case 0: return Tileset.WALL;
             case 1: return Tileset.FLOWER;
@@ -45,6 +45,7 @@ public class RandomWorldDemo {
             case 5: return Tileset.WATER;
             case 6: return Tileset.MOUNTAIN;
             case 7: return Tileset.TREE;
+            case 8: return Tileset.UNLOCKED_DOOR;
             default: return Tileset.LOCKED_DOOR;
         }
     }

@@ -11,7 +11,7 @@ public class DisplayMethods {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 30;
     private static final String BLOCK = "████████████████";
-    protected static String s = "0";
+    protected static String s = "";
     private static final String numbers = "1234567890s";
 
     protected static void mouseMenu(TETile[][] board) {
@@ -44,7 +44,7 @@ public class DisplayMethods {
     private static String drawQueue(){
         StdDraw.clear(Color.BLACK);
         String seed = "";
-        StdDraw.setFont(new Font("Monospaced", Font.ITALIC, 20));
+        StdDraw.setFont(new Font("Monospaced", Font.PLAIN, 20));
         StdDraw.text(0.5 * 30, 0.7 * 30, "When you are finished, type (s)");
         StdDraw.setFont(new Font("Monospaced", Font.BOLD, 30));
         StdDraw.text(0.5 * 30, 0.9 * 30, "Please type in a");
@@ -64,6 +64,7 @@ public class DisplayMethods {
                     StdDraw.text(0.5 * 30, 0.91 * 30, BLOCK);
                     StdDraw.text(0.5 * 30, 0.85 * 30, BLOCK);
                     StdDraw.text(0.5 * 30, 0.79 * 30, BLOCK);
+                    StdDraw.text(0.5 * 30, 0.4 * 30, seed);
                     StdDraw.setPenColor(Color.BLACK);
                     StdDraw.text(0.5 * 30, 0.9 * 30, "Please type in a");
                     StdDraw.text(0.5 * 30, 0.8 * 30, "numerical seed:");
@@ -127,16 +128,16 @@ public class DisplayMethods {
         StdDraw.setFont(new Font("Monospaced", Font.BOLD, 30));
         StdDraw.text(25,0.925 * 30, "Playing capture the flag:");
         StdDraw.setFont(new Font("Monospaced", Font.PLAIN, 19));
-        StdDraw.text(25,0.80 * 30, "This is a 2 player game, where each player's objective is to");
-        StdDraw.text(25,0.75 * 30, "capture randomly generated flags in a randomly generated");
-        StdDraw.text(25,0.70 * 30, "world. Player 1's movement controls are (wasd), while player");
-        StdDraw.text(25,0.65 * 30, "controls are (wasd), while player 2's are (ijkl). First one to");
-        StdDraw.text(25,0.60 * 30, "capture 10 flags is the winner.");
+        StdDraw.text(25,0.75 * 30, "This is a 2 player game, where each player's objective is to");
+        StdDraw.text(25,0.70 * 30, "capture randomly generated flags in a randomly generated");
+        StdDraw.text(25,0.65 * 30, "world. Player 1's movement controls are (w)(a)(s)(d), while player");
+        StdDraw.text(25,0.60 * 30, "2's are (i)(j)(k)(l). First one to capture 10 flags is the winner.");
         StdDraw.text(25,0.50 * 30, "Additionally, each player can also place blocks to stun the");
         StdDraw.text(25,0.45 * 30, "opponent, with the keys (e) and (o), respectively, to drop the");
         StdDraw.text(25,0.40 * 30, "block at the current location of the player. The more flags you");
         StdDraw.text(25,0.35 * 30, "collect, the more stun blocks you can place!");
         StdDraw.setPenColor(Color.cyan);
+        StdDraw.setFont(new Font("Monospaced", Font.PLAIN, 23));
         StdDraw.text(12.5,0.225 * 30, "Player 1 : ♚");
         StdDraw.setPenColor(Color.orange);
         StdDraw.text(37.5,0.225 * 30, "Player 2 : ♚");

@@ -21,11 +21,14 @@ public class Game {
      * Method used for playing a fresh game. The game should start from the main menu.
      */
     public void playWithKeyboard() {
-        //StdAudio.loop("/byog/Core/megalovania.wav");
+        StdAudio.loop("/audio/megalovania.wav");
         ter.initialize(30, 30);
         TETile[][] board = playWithInputString(DisplayMethods.drawMenu(ter));
-        StdAudio.close();
-        seed = Long.parseLong(DisplayMethods.s);
+        if (DisplayMethods.s.equals("")) {
+            seed = HelperMethods.seed;
+        } else {
+            seed = Long.parseLong(DisplayMethods.s);
+        }
         ter.initialize(WIDTH, HEIGHT + 5);
 
         Integer[] location1 = HelperMethods.findOrMakePlayer(board, seed, Tileset.PLAYER1);
@@ -87,6 +90,7 @@ public class Game {
                     File f = new File("./gameState.ser");
                     FileInputStream fs = new FileInputStream(f);
                     tiles = SaveAndLoadStream.loadGameState(fs);
+                    ter.initialize(WIDTH, HEIGHT + 5);
                     input = input.substring(1, input.length());
                 } catch (FileNotFoundException e) {
                     input = input.substring(1, input.length());
@@ -98,14 +102,14 @@ public class Game {
         }
         Integer[] location1 = HelperMethods.findOrMakePlayer(tiles, seed, Tileset.PLAYER1);
         Integer[] location2 = HelperMethods.findOrMakePlayer(tiles, seed, Tileset.PLAYER2);
-        while (!input.equals("") && !input.equals(":q")) {
+        while (!input.equals("") && !input.equals(":q") && !input.equals("q")) {
             location1 = HelperMethods.player1MovementWithInput(tiles, location1, input.charAt(0));
             location2 = HelperMethods.player2MovementWithInput(tiles, location2, input.charAt(0));
             HelperMethods.updateFlagnoshow(tiles);
             input = input.substring(1, input.length());
         }
 
-        if (input.length() >= 2 && input.substring(input.length() - 2).equals(":q")) {
+        if (input.length() >= 2 && input.substring(input.length() - 1).equals("q")) {
             SaveAndLoadStream.saveGameState(tiles);
         }
 
@@ -114,8 +118,9 @@ public class Game {
 
     public static void main(String[] args) {
         Game g = new Game();
-        //n98437swwikjlsokwedwd
-        //TETile[][] w = g.playWithInputString("n98437swwikjlsokwedwd");
+        //n98437swwikjlsokwedwdi:q
+        //laaaawwllllkikkkssssaaaaew
+        //TETile[][] w = g.playWithInputString("laaaawwllllkikkkssssaaaaew");
         //g.ter.renderFrame(w);
         g.playWithKeyboard();
     }
