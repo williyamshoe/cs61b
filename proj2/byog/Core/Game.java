@@ -27,6 +27,7 @@ public class Game {
             ter = new TERenderer();
         }
         StdAudio.loop("/audio/megalovania.wav");
+        //music from Toby Fox's game, "Undertale"
         ter.initialize(30, 30);
         TETile[][] board = playWithInputString(DisplayMethods.drawMenu(ter));
         if (DisplayMethods.s.equals("")) {
