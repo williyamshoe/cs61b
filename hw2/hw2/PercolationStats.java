@@ -9,6 +9,9 @@ public class PercolationStats {
 
     /* perform T independent experiments on an N-by-N grid */
     public PercolationStats(int N, int T, PercolationFactory pf) {
+        if (T <= 0) {
+            throw new java.lang.IllegalArgumentException();
+        }
         iterations = T;
         data = new double[T];
         for (int i = 0; i < T; i += 1) {
@@ -49,8 +52,8 @@ public class PercolationStats {
         return mean() + 1.96 * stddev() * java.lang.Math.pow(iterations, -0.5);
     }
 
-    public static void main(String[] args) {
-        PercolationStats n = new PercolationStats(10, 50, new PercolationFactory());
+    private static void main(String[] args) {
+        PercolationStats n = new PercolationStats(20, 50, new PercolationFactory());
         System.out.println("mean: " + n.mean());
         System.out.println("stddev: " + n.stddev());
         System.out.println("lower bound: " + n.confidenceLow());

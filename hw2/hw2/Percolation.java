@@ -42,7 +42,9 @@ public class Percolation {
                 world.union(converted, water);
                 world1.union(converted, water);
             }
-            if (row == len - 1) world.union(converted, core);
+            if (row == len - 1) {
+                world.union(converted, core);
+            }
             openSites += 1;
         }
     }
@@ -105,5 +107,7 @@ public class Percolation {
     }
 
     /* use for unit testing (not required) */
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+
+    }
 }
