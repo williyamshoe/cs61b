@@ -23,11 +23,11 @@ public class Solver {
 
         @Override
         public int compareTo(SearchNode o) {
-            if (current.estimatedDistanceToGoal() + moves >
-                    o.current.estimatedDistanceToGoal() + o.moves) {
+            if (current.estimatedDistanceToGoal() + moves
+                    > o.current.estimatedDistanceToGoal() + o.moves) {
                 return 1;
-            } else if (current.estimatedDistanceToGoal() + moves <
-                    o.current.estimatedDistanceToGoal() + o.moves) {
+            } else if (current.estimatedDistanceToGoal() + moves
+                    < o.current.estimatedDistanceToGoal() + o.moves) {
                 return -1;
             } else {
                 return 0;

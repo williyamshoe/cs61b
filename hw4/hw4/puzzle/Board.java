@@ -25,16 +25,16 @@ public class Board implements WorldState {
 
     public int tileAt(int i, int j) {
         if (i < 0 || j < 0 || i >= size || j >= size) {
-            throw new IndexOutOfBoundsException ();
+            throw new IndexOutOfBoundsException();
         }
         return tiles[i][j];
     }
 
-    public int size(){
+    public int size() {
         return size;
     }
 
-    public Iterable<WorldState> neighbors(){
+    public Iterable<WorldState> neighbors() {
         Set<WorldState> neighbs = new HashSet<>();
         int x0 = -1;
         int y0 = -1;
@@ -53,7 +53,9 @@ public class Board implements WorldState {
                 newtiles[x0][y0] = replacement;
                 newtiles[x0 + i][y0] = 0;
                 neighbs.add(new Board(newtiles));
-            } catch (IndexOutOfBoundsException e) {}
+            } catch (IndexOutOfBoundsException e) {
+                int wat = 0;
+            }
 
             try {
                 int replacement = tileAt(x0, y0 + i);
@@ -61,7 +63,9 @@ public class Board implements WorldState {
                 newtiles[x0][y0] = replacement;
                 newtiles[x0][y0 + i] = 0;
                 neighbs.add(new Board(newtiles));
-            } catch (IndexOutOfBoundsException e) {}
+            } catch (IndexOutOfBoundsException e) {
+                int wat = 0;
+            }
         }
         return neighbs;
     }
@@ -70,7 +74,7 @@ public class Board implements WorldState {
         int total = 0;
         for (int i = 0; i < size; i += 1) {
             for (int j = 0; j < size; j += 1) {
-                if ((1 + i * size + j) == tiles[i][j] && tiles[i][j] != 0) {
+                if ((1 + i * size + j) != tiles[i][j] && tiles[i][j] != 0) {
                     total += 1;
                 }
             }
@@ -83,8 +87,9 @@ public class Board implements WorldState {
         for (int i = 0; i < size; i += 1) {
             for (int j = 0; j < size; j += 1) {
                 if (tiles[i][j] != 0) {
-                    int temp = Math.abs(tiles[i][j] - j - i * size - 1);
-                    total += (temp / size) + (temp % size);
+                    int x = Math.abs((tiles[i][j] - 1) / size - i);
+                    int y = Math.abs((tiles[i][j] - 1) % size - j);
+                    total += y + x;
                 }
             }
         }
@@ -95,8 +100,8 @@ public class Board implements WorldState {
         return manhattan();
     }
 
+    @Override
     public boolean equals(Object y) {
-
         if (this == y) {
             return true;
         }
@@ -113,7 +118,19 @@ public class Board implements WorldState {
             }
         }
 
-        return otherBoard.size == size;
+        return otherBoard.size() == size;
+    }
+
+    @Override
+    public int hashCode() {
+        int tot = 0;
+        for (int i = 0; i < size; i += 1) {
+            for (int j = 0; j < size; j += 1) {
+                tot *= 10;
+                tot += tiles[i][j];
+            }
+        }
+        return tot;
     }
 
     /** Returns the string representation of the board. 
@@ -124,7 +141,7 @@ public class Board implements WorldState {
         s.append(N + "\n");
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                s.append(String.format("%2d ", tileAt(i,j)));
+                s.append(String.format("%2d ", tileAt(i, j)));
             }
             s.append("\n");
         }
