@@ -1,10 +1,124 @@
 package hw4.puzzle;
 
-public class Board {
+import java.util.HashSet;
+import java.util.Set;
+
+public class Board implements WorldState {
+
+    private int[][] tiles;
+    private int size;
+
+    private int[][] newArray(int[][] x) {
+        int[][] y = new int[x.length][x.length];
+        for (int i = 0; i < size; i += 1) {
+            for (int j = 0; j < size; j += 1) {
+                y[i][j] = x[i][j];
+            }
+        }
+        return y;
+    }
+
+    public Board(int[][] tiles) {
+        size = tiles.length;
+        this.tiles = newArray(tiles);
+    }
+
+    public int tileAt(int i, int j) {
+        if (i < 0 || j < 0 || i >= size || j >= size) {
+            throw new IndexOutOfBoundsException ();
+        }
+        return tiles[i][j];
+    }
+
+    public int size(){
+        return size;
+    }
+
+    public Iterable<WorldState> neighbors(){
+        Set<WorldState> neighbs = new HashSet<>();
+        int x0 = -1;
+        int y0 = -1;
+        for (int i = 0; i < size; i += 1) {
+            for (int j = 0; j < size; j += 1) {
+                if (tiles[i][j] == 0) {
+                    x0 = i;
+                    y0 = j;
+                }
+            }
+        }
+        for (int i = -1; i < 2; i += 2) {
+            try {
+                int replacement = tileAt(x0 + i, y0);
+                int[][] newtiles = newArray(tiles);
+                newtiles[x0][y0] = replacement;
+                newtiles[x0 + i][y0] = 0;
+                neighbs.add(new Board(newtiles));
+            } catch (IndexOutOfBoundsException e) {}
+
+            try {
+                int replacement = tileAt(x0, y0 + i);
+                int[][] newtiles = newArray(tiles);
+                newtiles[x0][y0] = replacement;
+                newtiles[x0][y0 + i] = 0;
+                neighbs.add(new Board(newtiles));
+            } catch (IndexOutOfBoundsException e) {}
+        }
+        return neighbs;
+    }
+
+    public int hamming() {
+        int total = 0;
+        for (int i = 0; i < size; i += 1) {
+            for (int j = 0; j < size; j += 1) {
+                if ((1 + i * size + j) == tiles[i][j] && tiles[i][j] != 0) {
+                    total += 1;
+                }
+            }
+        }
+        return total;
+    }
+
+    public int manhattan() {
+        int total = 0;
+        for (int i = 0; i < size; i += 1) {
+            for (int j = 0; j < size; j += 1) {
+                if (tiles[i][j] != 0) {
+                    int temp = Math.abs(tiles[i][j] - j - i * size - 1);
+                    total += (temp / size) + (temp % size);
+                }
+            }
+        }
+        return total;
+    }
+
+    public int estimatedDistanceToGoal() {
+        return manhattan();
+    }
+
+    public boolean equals(Object y) {
+
+        if (this == y) {
+            return true;
+        }
+        if (y == null || getClass() != y.getClass()) {
+            return false;
+        }
+
+        Board otherBoard = (Board) y;
+        for (int i = 0; i < size; i += 1) {
+            for (int j = 0; j < size; j += 1) {
+                if (otherBoard.tileAt(i, j) != tileAt(i, j)) {
+                    return false;
+                }
+            }
+        }
+
+        return otherBoard.size == size;
+    }
 
     /** Returns the string representation of the board. 
       * Uncomment this method. */
-    /*public String toString() {
+    public String toString() {
         StringBuilder s = new StringBuilder();
         int N = size();
         s.append(N + "\n");
@@ -16,6 +130,6 @@ public class Board {
         }
         s.append("\n");
         return s.toString();
-    }*/
+    }
 
 }
