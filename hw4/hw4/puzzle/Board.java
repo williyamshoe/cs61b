@@ -110,6 +110,11 @@ public class Board implements WorldState {
         }
 
         Board otherBoard = (Board) y;
+
+        if (otherBoard.size() != size) {
+            return false;
+        }
+        
         for (int i = 0; i < size; i += 1) {
             for (int j = 0; j < size; j += 1) {
                 if (otherBoard.tileAt(i, j) != tileAt(i, j)) {
@@ -118,7 +123,7 @@ public class Board implements WorldState {
             }
         }
 
-        return otherBoard.size() == size;
+        return true;
     }
 
     @Override
