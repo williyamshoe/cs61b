@@ -114,7 +114,7 @@ public class Board implements WorldState {
         if (otherBoard.size() != size) {
             return false;
         }
-        
+
         for (int i = 0; i < size; i += 1) {
             for (int j = 0; j < size; j += 1) {
                 if (otherBoard.tileAt(i, j) != tileAt(i, j)) {

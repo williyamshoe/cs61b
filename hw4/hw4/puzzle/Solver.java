@@ -53,7 +53,6 @@ public class Solver {
                 }
             }
         }
-
         SearchNode cur = pq.min();
         while (cur != null) {
             path.addFirst(cur.current);

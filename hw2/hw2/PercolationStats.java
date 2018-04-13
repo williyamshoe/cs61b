@@ -53,7 +53,7 @@ public class PercolationStats {
     }
 
     private static void main(String[] args) {
-        PercolationStats n = new PercolationStats(20, 50, new PercolationFactory());
+        PercolationStats n = new PercolationStats(30, 100, new PercolationFactory());
         System.out.println("mean: " + n.mean());
         System.out.println("stddev: " + n.stddev());
         System.out.println("lower bound: " + n.confidenceLow());
