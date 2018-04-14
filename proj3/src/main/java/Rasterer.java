@@ -46,8 +46,8 @@ public class Rasterer {
         Map<String, Object> results = new HashMap<>();
 
         double dResolution = (params.get("lrlon") - params.get("ullon")) / params.get("w");
-        double currentResolution = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) /
-                MapServer.TILE_SIZE;
+        double currentResolution = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON)
+                / MapServer.TILE_SIZE;
         int dDepth = 0;
         for (int i = 0; i < 8; i += 1) {
             if (currentResolution <= dResolution || i == 7) {
@@ -57,10 +57,10 @@ public class Rasterer {
             currentResolution = currentResolution / 2;
         }
 
-        double mapIncrementsLon = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) /
-                (Math.pow(2, dDepth));
-        double mapIncrementsLat = (MapServer.ROOT_LRLAT - MapServer.ROOT_ULLAT) /
-                (Math.pow(2, dDepth));
+        double mapIncrementsLon = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON)
+                / (Math.pow(2, dDepth));
+        double mapIncrementsLat = (MapServer.ROOT_LRLAT - MapServer.ROOT_ULLAT)
+                / (Math.pow(2, dDepth));
 
         int lrindexLon = 0;
         double currentLocLon = MapServer.ROOT_ULLON + mapIncrementsLon;
