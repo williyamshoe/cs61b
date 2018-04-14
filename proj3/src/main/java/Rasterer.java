@@ -45,65 +45,68 @@ public class Rasterer {
         // System.out.println(params);
         Map<String, Object> results = new HashMap<>();
 
-        double d_resolution = (params.get("lrlon") - params.get("ullon")) / params.get("w");
-        double current_resolution = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / MapServer.TILE_SIZE;
-        int d_depth = 0;
+        double dResolution = (params.get("lrlon") - params.get("ullon")) / params.get("w");
+        double currentResolution = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) /
+                MapServer.TILE_SIZE;
+        int dDepth = 0;
         for (int i = 0; i < 8; i += 1) {
-            if (current_resolution <= d_resolution || i == 7) {
-                d_depth = i;
+            if (currentResolution <= dResolution || i == 7) {
+                dDepth = i;
                 break;
             }
-            current_resolution = current_resolution / 2;
+            currentResolution = currentResolution / 2;
         }
 
-        double map_increments_lon = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) / (Math.pow(2, d_depth));
-        double map_increments_lat = (MapServer.ROOT_LRLAT - MapServer.ROOT_ULLAT) / (Math.pow(2, d_depth));
+        double mapIncrementsLon = (MapServer.ROOT_LRLON - MapServer.ROOT_ULLON) /
+                (Math.pow(2, dDepth));
+        double mapIncrementsLat = (MapServer.ROOT_LRLAT - MapServer.ROOT_ULLAT) /
+                (Math.pow(2, dDepth));
 
-        int lrindex_lon = 0;
-        double current_loc_lon = MapServer.ROOT_ULLON + map_increments_lon;
-        while (current_loc_lon < params.get("lrlon")) {
-            lrindex_lon += 1;
-            current_loc_lon += map_increments_lon;
+        int lrindexLon = 0;
+        double currentLocLon = MapServer.ROOT_ULLON + mapIncrementsLon;
+        while (currentLocLon < params.get("lrlon")) {
+            lrindexLon += 1;
+            currentLocLon += mapIncrementsLon;
         }
 
-        int ulindex_lon = 0;
-        current_loc_lon = MapServer.ROOT_ULLON + map_increments_lon;
-        while (current_loc_lon < params.get("ullon")) {
-            ulindex_lon += 1;
-            current_loc_lon += map_increments_lon;
+        int ulindexLon = 0;
+        currentLocLon = MapServer.ROOT_ULLON + mapIncrementsLon;
+        while (currentLocLon < params.get("ullon")) {
+            ulindexLon += 1;
+            currentLocLon += mapIncrementsLon;
         }
 
-        int lrindex_lat = 0;
-        double current_loc_lat = MapServer.ROOT_ULLAT + map_increments_lat;
-        while (current_loc_lat > params.get("lrlat")) {
-            lrindex_lat += 1;
-            current_loc_lat += map_increments_lat;
+        int lrindexLat = 0;
+        double currentLocLat = MapServer.ROOT_ULLAT + mapIncrementsLat;
+        while (currentLocLat > params.get("lrlat")) {
+            lrindexLat += 1;
+            currentLocLat += mapIncrementsLat;
         }
 
-        int ulindex_lat = 0;
-        current_loc_lat = MapServer.ROOT_ULLAT + map_increments_lat;
-        while (current_loc_lat > params.get("ullat")) {
-            ulindex_lat += 1;
-            current_loc_lat += map_increments_lat;
+        int ulindexLat = 0;
+        currentLocLat = MapServer.ROOT_ULLAT + mapIncrementsLat;
+        while (currentLocLat > params.get("ullat")) {
+            ulindexLat += 1;
+            currentLocLat += mapIncrementsLat;
         }
 
-        String[][] files = new String[lrindex_lat - ulindex_lat + 1][lrindex_lon - ulindex_lon + 1];
+        String[][] files = new String[lrindexLat - ulindexLat + 1][lrindexLon - ulindexLon + 1];
         int ycounter = -1;
-        for (int y = ulindex_lat; y < lrindex_lat + 1; y += 1) {
+        for (int y = ulindexLat; y < lrindexLat + 1; y += 1) {
             ycounter += 1;
             int xcounter = -1;
-            for (int x = ulindex_lon; x < lrindex_lon + 1; x += 1) {
+            for (int x = ulindexLon; x < lrindexLon + 1; x += 1) {
                 xcounter += 1;
-                files[ycounter][xcounter] = "d" + d_depth + "_x" + x + "_y" + y + ".png";
+                files[ycounter][xcounter] = "d" + dDepth + "_x" + x + "_y" + y + ".png";
             }
         }
 
         results.put("render_grid", files);
-        results.put("raster_ul_lon", MapServer.ROOT_ULLON + (ulindex_lon) * map_increments_lon);
-        results.put("raster_lr_lon", MapServer.ROOT_ULLON + (lrindex_lon + 1) * map_increments_lon);
-        results.put("raster_ul_lat", MapServer.ROOT_ULLAT + (ulindex_lat) * map_increments_lat);
-        results.put("raster_lr_lat", MapServer.ROOT_ULLAT + (lrindex_lat + 1) * map_increments_lat);
-        results.put("depth", d_depth);
+        results.put("raster_ul_lon", MapServer.ROOT_ULLON + (ulindexLon) * mapIncrementsLon);
+        results.put("raster_lr_lon", MapServer.ROOT_ULLON + (lrindexLon + 1) * mapIncrementsLon);
+        results.put("raster_ul_lat", MapServer.ROOT_ULLAT + (ulindexLat) * mapIncrementsLat);
+        results.put("raster_lr_lat", MapServer.ROOT_ULLAT + (lrindexLat + 1) * mapIncrementsLat);
+        results.put("depth", dDepth);
         results.put("query_success", true);
 
         return results;
