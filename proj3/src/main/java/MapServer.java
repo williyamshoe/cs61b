@@ -133,6 +133,7 @@ public class MapServer {
                     getRequestParams(req, REQUIRED_ROUTE_REQUEST_PARAMS);
             route = Router.shortestPath(graph, params.get("start_lon"), params.get("start_lat"),
                     params.get("end_lon"), params.get("end_lat"));
+
             String directions = getDirectionsText();
             Map<String, Object> routeParams = new HashMap<>();
             routeParams.put("routing_success", !route.isEmpty());

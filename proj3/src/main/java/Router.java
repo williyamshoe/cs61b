@@ -1,5 +1,4 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +11,7 @@ import java.util.regex.Pattern;
  * down to the priority you use to order your vertices.
  */
 public class Router {
+
     /**
      * Return a List of longs representing the shortest path from the node
      * closest to a start location and the node closest to the destination
@@ -25,7 +25,76 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-        return null; // FIXME
+
+        class PriorityEdge implements Comparable<PriorityEdge> {
+            private long end;
+            private double priority;
+
+            private PriorityEdge(long v1, double p) {
+                end = v1;
+                priority = p;
+            }
+
+            @Override
+            public int compareTo(PriorityEdge o) {
+                if (priority - o.priority > 0) {
+                    return 1;
+                } else if (priority - o.priority < 0) {
+                    return -1;
+                }
+                return 0;
+            }
+        }
+
+        PriorityEdge currentNode;
+
+        long current = g.closest(stlon, stlat);
+        long end = g.closest(destlon, destlat);
+
+        HashMap<Long, Double> distTo = new HashMap<>();
+        HashMap<Long, Long> edgeTo = new HashMap<>();
+        HashMap<Long, Boolean> marked = new HashMap<>();
+
+        PriorityQueue<PriorityEdge> fringe = new PriorityQueue<>();
+
+        List<Long> finalRoute = new ArrayList<>();
+
+        for (long v : g.vertices()) {
+            distTo.put(v, Double.MAX_VALUE);
+            edgeTo.put(v, (long) -1);
+            marked.put(v, false);
+        }
+
+        edgeTo.put(current, (long) -10);
+        distTo.put(current, 0.0);
+        fringe.add(new PriorityEdge(current, 0.0));
+
+        while (current != end) {
+            currentNode = fringe.remove();
+            current = currentNode.end;
+
+            marked.put(current, true);
+
+            for (long neighbor : g.adjacent(current)) {
+                if (!marked.get(neighbor)) {
+                    double totalDistance = g.distance(current, neighbor) + distTo.get(current);
+                    if (distTo.get(neighbor) > totalDistance) {
+                        double totalPriority = totalDistance + g.distance(neighbor, end);
+                        fringe.add(new PriorityEdge(neighbor, totalPriority));
+                        distTo.put(neighbor, totalDistance);
+                        edgeTo.put(neighbor, current);
+                    }
+                }
+            }
+        }
+
+        long index = end;
+        while (index > -5) {
+            finalRoute.add(index);
+            index = edgeTo.get(index);
+        }
+
+        return finalRoute;
     }
 
     /**
@@ -33,11 +102,11 @@ public class Router {
      * @param g The graph to use.
      * @param route The route to translate into directions. Each element
      *              corresponds to a node from the graph in the route.
-     * @return A list of NavigatiionDirection objects corresponding to the input
+     * @return A list of NavigationDirection objects corresponding to the input
      * route.
      */
     public static List<NavigationDirection> routeDirections(GraphDB g, List<Long> route) {
-        return null; // FIXME
+        return null;
     }
 
 
