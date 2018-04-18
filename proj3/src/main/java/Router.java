@@ -57,8 +57,6 @@ public class Router {
 
         PriorityQueue<PriorityEdge> fringe = new PriorityQueue<>();
 
-        List<Long> finalRoute = new ArrayList<>();
-
         for (long v : g.vertices()) {
             distTo.put(v, Double.MAX_VALUE);
             edgeTo.put(v, (long) -1);
@@ -88,10 +86,17 @@ public class Router {
             }
         }
 
+        Stack<Long> backwards = new Stack<>();
+        List<Long> finalRoute = new ArrayList<>();
+
         long index = end;
         while (index > -5) {
-            finalRoute.add(index);
+            backwards.add(index);
             index = edgeTo.get(index);
+        }
+
+        while (!backwards.isEmpty()) {
+            finalRoute.add(backwards.pop());
         }
 
         return finalRoute;
