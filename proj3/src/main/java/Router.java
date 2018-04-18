@@ -31,11 +31,9 @@ public class Router {
      */
     public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
                                           double destlon, double destlat) {
-
         class PriorityEdge implements Comparable<PriorityEdge> {
             private long end;
             private double priority;
-
             private PriorityEdge(long v1, double p) {
                 end = v1;
                 priority = p;
@@ -53,16 +51,12 @@ public class Router {
         }
 
         PriorityEdge currentNode;
-
         long current = g.closest(stlon, stlat);
         long end = g.closest(destlon, destlat);
-
         HashMap<Long, Double> distTo = new HashMap<>();
         HashMap<Long, Long> edgeTo = new HashMap<>();
         HashMap<Long, Boolean> marked = new HashMap<>();
-
         HashMap<Long, PriorityEdge> allEdges = new HashMap<>();
-
         PriorityQueue<PriorityEdge> fringe = new PriorityQueue<>();
 
         for (long v : g.vertices()) {
@@ -70,16 +64,17 @@ public class Router {
             edgeTo.put(v, (long) -1);
             marked.put(v, false);
         }
-
         edgeTo.put(current, (long) -9);
         distTo.put(current, 0.0);
         fringe.add(new PriorityEdge(current, 0.0));
         while (current != end) {
-            currentNode = fringe.remove();
+            try {
+                currentNode = fringe.remove();
+            } catch (java.util.NoSuchElementException e) {
+                return null;
+            }
             current = currentNode.end;
-
             marked.put(current, true);
-
             for (long neighbor : g.adjacent(current)) {
                 if (!marked.get(neighbor)) {
                     double totalDistance = g.distance(current, neighbor) + distTo.get(current);
@@ -101,20 +96,14 @@ public class Router {
 
         Stack<Long> backwards = new Stack<>();
         List<Long> finalRoute = new ArrayList<>();
-
         long index = end;
         while (index > -5) {
-            System.out.println(index);
             backwards.add(index);
             index = edgeTo.get(index);
         }
-
-        System.out.println();
-
         while (!backwards.isEmpty()) {
             finalRoute.add(backwards.pop());
         }
-
         return finalRoute;
     }
 
