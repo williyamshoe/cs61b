@@ -61,6 +61,8 @@ public class Router {
         HashMap<Long, Long> edgeTo = new HashMap<>();
         HashMap<Long, Boolean> marked = new HashMap<>();
 
+        HashMap<Long, PriorityEdge> allEdges = new HashMap<>();
+
         PriorityQueue<PriorityEdge> fringe = new PriorityQueue<>();
 
         for (long v : g.vertices()) {
@@ -72,7 +74,6 @@ public class Router {
         edgeTo.put(current, (long) -9);
         distTo.put(current, 0.0);
         fringe.add(new PriorityEdge(current, 0.0));
-
         while (current != end) {
             currentNode = fringe.remove();
             current = currentNode.end;
@@ -82,9 +83,15 @@ public class Router {
             for (long neighbor : g.adjacent(current)) {
                 if (!marked.get(neighbor)) {
                     double totalDistance = g.distance(current, neighbor) + distTo.get(current);
-                    if (distTo.get(neighbor) >= totalDistance) {
+                    if (distTo.get(neighbor) > totalDistance) {
                         double totalPriority = totalDistance + g.distance(neighbor, end);
-                        fringe.add(new PriorityEdge(neighbor, totalPriority));
+                        PriorityEdge edge = new PriorityEdge(neighbor, totalPriority);
+                        if (allEdges.containsKey(neighbor)) {
+                            fringe.remove(allEdges.get(neighbor));
+                            allEdges.remove(neighbor);
+                        }
+                        fringe.add(edge);
+                        allEdges.put(neighbor, edge);
                         distTo.put(neighbor, totalDistance);
                         edgeTo.put(neighbor, current);
                     }
@@ -97,9 +104,12 @@ public class Router {
 
         long index = end;
         while (index > -5) {
+            System.out.println(index);
             backwards.add(index);
             index = edgeTo.get(index);
         }
+
+        System.out.println();
 
         while (!backwards.isEmpty()) {
             finalRoute.add(backwards.pop());
