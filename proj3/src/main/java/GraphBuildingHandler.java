@@ -97,15 +97,15 @@ public class GraphBuildingHandler extends DefaultHandler {
         } else if (activeState.equals("way") && qName.equals("tag")) {
             /* While looking at a way, we found a <tag...> tag. */
             String k = attributes.getValue("k");
-            String v = attributes.getValue("v");
+            String type = attributes.getValue("v");
             if (k.equals("highway")) {
                 /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
-                if (ALLOWED_HIGHWAY_TYPES.contains(v) && !verts.isEmpty()) {
+                if (ALLOWED_HIGHWAY_TYPES.contains(type) && !verts.isEmpty()) {
                     willput = true;
                 }
             } else if (k.equals("name")) {
-                name = v;
+                name = type;
                 //System.out.println("Way Name: " + v);
             }
             //System.out.println("Tag with k=" + k + ", v=" + v + ".");

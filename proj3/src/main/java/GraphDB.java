@@ -191,7 +191,7 @@ public class GraphDB {
     }
 
     void addNode(long id, double lon, double lat) {
-        if (!vertices.containsKey(id)){
+        if (!vertices.containsKey(id)) {
             vertices.put(id, new Node(id, lon, lat));
         }
     }
