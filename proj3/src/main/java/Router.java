@@ -69,7 +69,7 @@ public class Router {
             marked.put(v, false);
         }
 
-        edgeTo.put(current, (long) -10);
+        edgeTo.put(current, (long) -9);
         distTo.put(current, 0.0);
         fringe.add(new PriorityEdge(current, 0.0));
 
@@ -82,7 +82,7 @@ public class Router {
             for (long neighbor : g.adjacent(current)) {
                 if (!marked.get(neighbor)) {
                     double totalDistance = g.distance(current, neighbor) + distTo.get(current);
-                    if (distTo.get(neighbor) > totalDistance) {
+                    if (distTo.get(neighbor) >= totalDistance) {
                         double totalPriority = totalDistance + g.distance(neighbor, end);
                         fringe.add(new PriorityEdge(neighbor, totalPriority));
                         distTo.put(neighbor, totalDistance);
