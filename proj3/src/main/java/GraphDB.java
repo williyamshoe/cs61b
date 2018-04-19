@@ -45,15 +45,18 @@ public class GraphDB {
         try {
             String loc = GraphDB.cleanString(locationName);
             List<Map<String, Object>> result = new ArrayList<>();
-            int counter = 0;
-            for (long v : dictionary.get(loc).get(locationName).vert) {
-                HashMap<String, Object> info = new HashMap<>();
-                info.put("lat", dictionary.get(loc).get(locationName).lats.get(counter));
-                info.put("lon", dictionary.get(loc).get(locationName).lons.get(counter));
-                info.put("name", dictionary.get(loc).get(locationName).name);
-                info.put("id", v);
-                result.add(info);
-                counter += 1;
+            for (FullNameLonLatAndVertex box : dictionary.get(loc).values()) {
+                int counter = 0;
+                for (long v : box.vert) {
+                    HashMap<String, Object> info = new HashMap<>();
+                    info.put("lat", box.lats.get(counter));
+                    info.put("lon", box.lons.get(counter));
+                    info.put("name", box.name);
+                    info.put("id", v);
+
+                    result.add(info);
+                    counter += 1;
+                }
             }
             return result;
         } catch (NullPointerException e) {
