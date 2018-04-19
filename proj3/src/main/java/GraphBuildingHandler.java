@@ -48,8 +48,10 @@ public class GraphBuildingHandler extends DefaultHandler {
     public GraphBuildingHandler(GraphDB g) {
         this.g = g;
     }
+    long vertex;
+    double ln;
+    double lt;
     private Deque<String> verts = new ArrayDeque<>();
-    private long v;
     private boolean willput = false;
     private String name;
 
@@ -77,10 +79,10 @@ public class GraphBuildingHandler extends DefaultHandler {
 
             /* TODO Use the above information to save a "node" to somewhere. */
             /* Hint: A graph-like structure would be nice. */
-            v = Long.parseLong(attributes.getValue("id"));
-            double ln = Double.parseDouble(attributes.getValue("lon"));
-            double lt = Double.parseDouble(attributes.getValue("lat"));
-            g.addNode(v, ln, lt);
+            vertex = Long.parseLong(attributes.getValue("id"));
+            ln = Double.parseDouble(attributes.getValue("lon"));
+            lt = Double.parseDouble(attributes.getValue("lat"));
+            g.addNode(vertex, ln, lt);
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
@@ -120,7 +122,10 @@ public class GraphBuildingHandler extends DefaultHandler {
             /* Hint: Since we found this <tag...> INSIDE a node, we should probably remember which
             node this tag belongs to. Remember XML is parsed top-to-bottom, so probably it's the
             last node that you looked at (check the first if-case). */
-            g.setName(v, attributes.getValue("v"));
+            String actual = attributes.getValue("v");
+            String cleaned = GraphDB.cleanString(actual);
+            g.putLocation(cleaned);
+            g.addToDictionary(cleaned, actual, vertex, ln, lt);
             //System.out.println("Node's name: " + attributes.getValue("v"));
         }
     }

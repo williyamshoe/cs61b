@@ -3,8 +3,10 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -22,7 +24,38 @@ public class GraphDB {
     /** Your instance variables for storing the graph. You should consider
      * creating helper classes, e.g. Node, Edge, etc. */
 
-    Map<Long, Node> vertices = new HashMap<>();
+    public List<String> getLocationsByPrefix(String prefix) {
+        try {
+            List<String> cleaned = prefixGet(GraphDB.cleanString(prefix));
+            List<String> result = new ArrayList<>();
+            for (String i : cleaned) {
+                if (!result.contains(getFromDictionary(i).name)) {
+                    result.add(getFromDictionary(i).name);
+                }
+            }
+            return result;
+        } catch(NullPointerException e) {
+            return null;
+        }
+    }
+
+    public List<Map<String, Object>> getLocations(String locationName) {
+        String loc = GraphDB.cleanString(locationName);
+        List<Map<String, Object>> result = new ArrayList<>();
+        int counter = 0;
+        for (long v : getFromDictionary(loc).vert) {
+            HashMap<String, Object> info = new HashMap<>();
+            info.put("lat", getFromDictionary(loc).lons.get(counter));
+            info.put("lon", getFromDictionary(loc).lats.get(counter));
+            info.put("name", getFromDictionary(loc).name);
+            info.put("id", v);
+            result.add(info);
+            counter += 1;
+        }
+        return result;
+    }
+
+    private Map<Long, Node> vertices = new HashMap<>();
 
     class Node {
         long id;
@@ -37,6 +70,82 @@ public class GraphDB {
             this.lat = lat;
             neighbors = new HashMap<>();
         }
+    }
+
+    class TrieNode {
+        boolean exists;
+        TrieNode[] links;
+        List<String> allSuffix;
+
+        TrieNode() {
+            links = new TrieNode[128];
+            exists = false;
+            allSuffix = new ArrayList<>();
+        }
+    }
+    private TrieNode root = new TrieNode();
+
+    void putLocation(String loc) {
+        putLocation(root, cleanString(loc), 0);
+    }
+
+    private TrieNode putLocation(TrieNode x, String loc, int d) {
+        if (x == null) {
+            x = new TrieNode();
+        }
+        if (d == loc.length()) {
+            x.allSuffix.add(loc);
+            x.exists = true;
+            return x;
+        }
+        char c = loc.charAt(d);
+        x.allSuffix.add(loc);
+        x.links[c] = putLocation(x.links[c], loc, d + 1);
+        return x;
+    }
+
+    List<String> prefixGet(String prefix) {
+        TrieNode pointer = root;
+        for (int i = 0; i < prefix.length(); i += 1) {
+            pointer = pointer.links[prefix.charAt(i)];
+        }
+        try {
+            return pointer.allSuffix;
+        } catch (NullPointerException e) {
+            return null;
+        }
+    }
+
+    class FullNameLonLatAndVertex {
+        String name;
+        List<Long> vert;
+        List<Double> lons;
+        List<Double> lats;
+        FullNameLonLatAndVertex(String s, long v, double lon, double lat) {
+            name = s;
+            vert = new ArrayList<>();
+            lons = new ArrayList<>();
+            lats = new ArrayList<>();
+            vert.add(v);
+            lons.add(lon);
+            lats.add(lat);
+        }
+    }
+
+    private HashMap<String, FullNameLonLatAndVertex> dictionary = new HashMap<>();
+
+    void addToDictionary(String cleaned, String actual, long vert, double lon, double lat) {
+        if (!dictionary.containsKey(cleaned)) {
+            dictionary.put(cleaned, new FullNameLonLatAndVertex(actual, vert, lon, lat));
+        } else {
+            dictionary.get(cleaned).vert.add(vert);
+            dictionary.get(cleaned).lons.add(lon);
+            dictionary.get(cleaned).lats.add(lat);
+        }
+    }
+
+    FullNameLonLatAndVertex getFromDictionary(String cleanedKey) {
+        return dictionary.get(cleanedKey);
     }
 
     /**
