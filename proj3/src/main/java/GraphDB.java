@@ -42,19 +42,23 @@ public class GraphDB {
     }
 
     public List<Map<String, Object>> getLocations(String locationName) {
-        String loc = GraphDB.cleanString(locationName);
-        List<Map<String, Object>> result = new ArrayList<>();
-        int counter = 0;
-        for (long v : dictionary.get(loc).get(locationName).vert) {
-            HashMap<String, Object> info = new HashMap<>();
-            info.put("lat", dictionary.get(loc).get(locationName).lats.get(counter));
-            info.put("lon", dictionary.get(loc).get(locationName).lons.get(counter));
-            info.put("name", dictionary.get(loc).get(locationName).name);
-            info.put("id", v);
-            result.add(info);
-            counter += 1;
+        try {
+            String loc = GraphDB.cleanString(locationName);
+            List<Map<String, Object>> result = new ArrayList<>();
+            int counter = 0;
+            for (long v : dictionary.get(loc).get(locationName).vert) {
+                HashMap<String, Object> info = new HashMap<>();
+                info.put("lat", dictionary.get(loc).get(locationName).lats.get(counter));
+                info.put("lon", dictionary.get(loc).get(locationName).lons.get(counter));
+                info.put("name", dictionary.get(loc).get(locationName).name);
+                info.put("id", v);
+                result.add(info);
+                counter += 1;
+            }
+            return result;
+        } catch (NullPointerException e) {
+            return null;
         }
-        return result;
     }
 
     private Map<Long, Node> vertices = new HashMap<>();
