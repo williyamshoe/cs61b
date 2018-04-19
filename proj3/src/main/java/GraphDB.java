@@ -29,8 +29,10 @@ public class GraphDB {
             List<String> cleaned = prefixGet(GraphDB.cleanString(prefix));
             List<String> result = new ArrayList<>();
             for (String i : cleaned) {
-                if (!result.contains(getFromDictionary(i).name)) {
-                    result.add(getFromDictionary(i).name);
+                for (String s : dictionary.get(i).keySet()) {
+                    if (!result.contains(s)) {
+                        result.add(s);
+                    }
                 }
             }
             return result;
@@ -43,11 +45,11 @@ public class GraphDB {
         String loc = GraphDB.cleanString(locationName);
         List<Map<String, Object>> result = new ArrayList<>();
         int counter = 0;
-        for (long v : getFromDictionary(loc).vert) {
+        for (long v : dictionary.get(loc).get(locationName).vert) {
             HashMap<String, Object> info = new HashMap<>();
-            info.put("lat", getFromDictionary(loc).lons.get(counter));
-            info.put("lon", getFromDictionary(loc).lats.get(counter));
-            info.put("name", getFromDictionary(loc).name);
+            info.put("lat", dictionary.get(loc).get(locationName).lats.get(counter));
+            info.put("lon", dictionary.get(loc).get(locationName).lons.get(counter));
+            info.put("name", dictionary.get(loc).get(locationName).name);
             info.put("id", v);
             result.add(info);
             counter += 1;
@@ -104,7 +106,7 @@ public class GraphDB {
         return x;
     }
 
-    List<String> prefixGet(String prefix) {
+    private List<String> prefixGet(String prefix) {
         TrieNode pointer = root;
         for (int i = 0; i < prefix.length(); i += 1) {
             pointer = pointer.links[prefix.charAt(i)];
@@ -132,20 +134,20 @@ public class GraphDB {
         }
     }
 
-    private HashMap<String, FullNameLonLatAndVertex> dictionary = new HashMap<>();
+    private HashMap<String, Map<String, FullNameLonLatAndVertex>> dictionary = new HashMap<>();
 
     void addToDictionary(String cleaned, String actual, long vert, double lon, double lat) {
         if (!dictionary.containsKey(cleaned)) {
-            dictionary.put(cleaned, new FullNameLonLatAndVertex(actual, vert, lon, lat));
+            Map<String, FullNameLonLatAndVertex> temp = new HashMap<>();
+            temp.put(actual, new FullNameLonLatAndVertex(actual, vert, lon, lat));
+            dictionary.put(cleaned, temp);
+        } else if (dictionary.get(cleaned).containsKey(actual)) {
+            dictionary.get(cleaned).get(actual).vert.add(vert);
+            dictionary.get(cleaned).get(actual).lons.add(lon);
+            dictionary.get(cleaned).get(actual).lats.add(lat);
         } else {
-            dictionary.get(cleaned).vert.add(vert);
-            dictionary.get(cleaned).lons.add(lon);
-            dictionary.get(cleaned).lats.add(lat);
+            dictionary.get(cleaned).put(actual, new FullNameLonLatAndVertex(actual, vert, lon, lat));
         }
-    }
-
-    FullNameLonLatAndVertex getFromDictionary(String cleanedKey) {
-        return dictionary.get(cleanedKey);
     }
 
     /**
