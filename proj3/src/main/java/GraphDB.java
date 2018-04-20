@@ -233,7 +233,7 @@ public class GraphDB {
         return distance(lon(v), lat(v), lon(w), lat(w));
     }
 
-    double distance(double lonV, double latV, double lonW, double latW) {
+    static double distance(double lonV, double latV, double lonW, double latW) {
         double phi1 = Math.toRadians(latV);
         double phi2 = Math.toRadians(latW);
         double dphi = Math.toRadians(latW - latV);
@@ -260,7 +260,7 @@ public class GraphDB {
         return bearing(lon(v), lat(v), lon(w), lat(w));
     }
 
-    double bearing(double lonV, double latV, double lonW, double latW) {
+    static double bearing(double lonV, double latV, double lonW, double latW) {
         double phi1 = Math.toRadians(latV);
         double phi2 = Math.toRadians(latW);
         double lambda1 = Math.toRadians(lonV);
