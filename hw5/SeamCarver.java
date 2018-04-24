@@ -5,7 +5,7 @@ public class SeamCarver {
     private Picture pic;
 
     public SeamCarver(Picture picture) {
-        pic = picture;
+        pic = new Picture(picture);
     }
 
     /*current picture*/
@@ -63,8 +63,14 @@ public class SeamCarver {
         double mincost = Double.MAX_VALUE;
         int minindex = -1;
 
+        double mincostprior = Double.MAX_VALUE;
+
         for (int i = 0; i < pic.width(); i += 1) {
             cost[0][i] = energy(i, 0);
+            if (cost[0][i] < mincostprior) {
+                mincostprior = cost[0][i];
+                minindex = i;
+            }
         }
 
         for (int y = 1; y < cost.length; y += 1) {
@@ -86,12 +92,12 @@ public class SeamCarver {
                         path[y][x] = -1;
                     }
                 } else {
-                    if (cost[y - 1][x] <= cost[y - 1][x + 1] &&
-                            cost[y - 1][x] <= cost[y - 1][x - 1]) {
+                    if (cost[y - 1][x] <= cost[y - 1][x + 1]
+                            && cost[y - 1][x] <= cost[y - 1][x - 1]) {
                         cost[y][x] = energy(x, y) + cost[y - 1][x];
                         path[y][x] = 0;
-                    } else if (cost[y - 1][x + 1] <= cost[y - 1][x - 1] &&
-                            cost[y - 1][x + 1] <= cost[y - 1][x]) {
+                    } else if (cost[y - 1][x + 1] <= cost[y - 1][x - 1]
+                            && cost[y - 1][x + 1] <= cost[y - 1][x]) {
                         cost[y][x] = energy(x, y) + cost[y - 1][x + 1];
                         path[y][x] = 1;
                     } else {
