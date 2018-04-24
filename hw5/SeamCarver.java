@@ -4,13 +4,13 @@ import edu.princeton.cs.algs4.Picture;
 public class SeamCarver {
     private Picture pic;
 
-    public SeamCarver(Picture picture){
+    public SeamCarver(Picture picture) {
         pic = picture;
     }
 
     /*current picture*/
     public Picture picture() {
-        return pic;
+        return new Picture(pic);
     }
 
     /*width of current picture*/
@@ -31,14 +31,14 @@ public class SeamCarver {
         Color left = pic.get(Math.floorMod(x - 1, pic.width()), y);
 
         int deltayred = (top.getRed() - bottom.getRed()) * (top.getRed() - bottom.getRed());
-        int deltaygreen = (top.getGreen() - bottom.getGreen()) * (top.getGreen() - bottom.getGreen());
+        int deltayg = (top.getGreen() - bottom.getGreen()) * (top.getGreen() - bottom.getGreen());
         int deltayblue = (top.getBlue() - bottom.getBlue()) * (top.getBlue() - bottom.getBlue());
 
         int deltaxred = (left.getRed() - right.getRed()) * (left.getRed() - right.getRed());
-        int deltaxgreen = (left.getGreen() - right.getGreen()) * (left.getGreen() - right.getGreen());
+        int deltaxg = (left.getGreen() - right.getGreen()) * (left.getGreen() - right.getGreen());
         int deltaxblue = (left.getBlue() - right.getBlue()) * (left.getBlue() - right.getBlue());
 
-        return deltayred + deltaygreen + deltayblue + deltaxred + deltaxgreen + deltaxblue;
+        return deltayred + deltayg + deltayblue + deltaxred + deltaxg + deltaxblue;
     }
 
     /*sequence of indices for horizontal seam*/
@@ -70,7 +70,7 @@ public class SeamCarver {
         for (int y = 1; y < cost.length; y += 1) {
             for (int x = 0; x < pic.width(); x += 1) {
                 if (x == 0) {
-                    if (cost[y - 1][x] <= cost[y - 1][x + 1]) {
+                    if (cost[y - 1][x] <= cost[y - 1][Math.floorMod(x + 1, pic.width())]) {
                         cost[y][x] = energy(x, y) + cost[y - 1][x];
                         path[y][x] = 0;
                     } else {
@@ -86,10 +86,12 @@ public class SeamCarver {
                         path[y][x] = -1;
                     }
                 } else {
-                    if (cost[y - 1][x] <= cost[y - 1][x + 1] && cost[y - 1][x] <= cost[y - 1][x - 1]) {
+                    if (cost[y - 1][x] <= cost[y - 1][x + 1] &&
+                            cost[y - 1][x] <= cost[y - 1][x - 1]) {
                         cost[y][x] = energy(x, y) + cost[y - 1][x];
                         path[y][x] = 0;
-                    } else if (cost[y - 1][x + 1] <= cost[y - 1][x - 1] && cost[y - 1][x + 1] <= cost[y - 1][x]) {
+                    } else if (cost[y - 1][x + 1] <= cost[y - 1][x - 1] &&
+                            cost[y - 1][x + 1] <= cost[y - 1][x]) {
                         cost[y][x] = energy(x, y) + cost[y - 1][x + 1];
                         path[y][x] = 1;
                     } else {
